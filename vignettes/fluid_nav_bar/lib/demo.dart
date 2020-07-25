@@ -37,6 +37,7 @@ class _FluidNavBarDemoState extends State {
             onPressed: () {
               Navigator.of(context).push(_createRoute());
             },
+            tooltip: 'RACE TIMER',
             child: Icon(
               Icons.timer,
               size: 42,

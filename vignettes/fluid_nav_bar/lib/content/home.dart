@@ -26,25 +26,38 @@ class _HomeContentState extends State<HomeContent>
   @override
   Widget build(context) {
     double screenHeight = MediaQuery.of(context).size.height;
+
+    // do not show ripple on button tap for iOS or macOS
+    var color = Colors.transparent;
+    switch (Theme.of(context).platform) {
+      case TargetPlatform.iOS:
+      case TargetPlatform.macOS:
+        color = Constants.darkPinkColor;
+        break;
+      default:
+        break;
+    }
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        Container(
-          height: 42,
+        Material(
           color: Constants.darkPinkColor,
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: Container(
-            color: Constants.darkPinkColor,
+            height: 42,
+            color: color,
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
             child: TabBar(
               controller: _tabController,
               labelColor: Constants.darkPinkColor,
               unselectedLabelColor: Constants.darkUnselectedTabLabelColor,
               indicatorSize: TabBarIndicatorSize.label,
               indicatorColor: Constants.darkPinkColor,
-
               indicator: BoxDecoration(
-                  borderRadius: BorderRadius.circular(24), color: Colors.white),
+                borderRadius: BorderRadius.circular(24),
+                color: Colors.white,
+              ),
 //            isScrollable: true,
               tabs: <Widget>[
                 Tab(
@@ -56,7 +69,7 @@ class _HomeContentState extends State<HomeContent>
                       alignment: Alignment.center,
                       child: Text(
                         "FAMILIES",
-                        style: TextStyle(fontSize: 16),
+                        style: TextStyle(fontSize: 15),
                       ),
                     ),
                   ),
@@ -70,7 +83,7 @@ class _HomeContentState extends State<HomeContent>
                       alignment: Alignment.center,
                       child: Text(
                         "SWIMMERS",
-                        style: TextStyle(fontSize: 16),
+                        style: TextStyle(fontSize: 15),
                       ),
                     ),
                   ),
