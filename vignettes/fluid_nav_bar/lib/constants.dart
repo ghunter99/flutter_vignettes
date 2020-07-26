@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
 class Constants {
+  // Sentinel value for the system text scale factor option.
+  static const double systemTextScaleFactorOption = -1;
+
   // height of the app header
   static const double appHeaderHeight = 64;
 
