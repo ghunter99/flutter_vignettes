@@ -102,6 +102,9 @@ class _HomeContentState extends State<HomeContent>
                 child: ListView.builder(
                   itemCount: 3,
                   itemBuilder: (content, index) {
+                    var avatarColor = Constants.darkCyanColor;
+                    if (index == 1) avatarColor = Color(0xFF37598C);
+                    if (index == 2) avatarColor = Color(0xFFf4a647);
                     return Card(
                       color: Constants.darkListTileBackgroundColor,
                       child: ListTile(
@@ -114,7 +117,7 @@ class _HomeContentState extends State<HomeContent>
                           style: TextStyle(color: Constants.darkPinkColor),
                         ),
                         leading: CircleAvatar(
-                          backgroundColor: Constants.darkPinkColor,
+                          backgroundColor: avatarColor,
                           foregroundColor: Colors.white,
                           child: Text('AH'),
                         ),
@@ -128,6 +131,19 @@ class _HomeContentState extends State<HomeContent>
                 child: ListView.builder(
                   itemCount: 12,
                   itemBuilder: (content, index) {
+                    var avatarColor = Constants.darkCyanColor;
+                    if (index == 1) avatarColor = Color(0xFF37598C);
+                    if (index == 2) avatarColor = Color(0xFFf4a647);
+                    if (index == 3) avatarColor = Constants.darkCyanColor;
+                    if (index == 4) avatarColor = Constants.darkPinkColor;
+                    if (index == 5) avatarColor = Color(0xFF37598C);
+                    if (index == 6) avatarColor = Color(0xFFf4a647);
+                    if (index == 7) avatarColor = Constants.darkCyanColor;
+                    if (index == 8) avatarColor = Constants.darkPinkColor;
+                    if (index == 9) avatarColor = Color(0xFF37598C);
+                    if (index == 10) avatarColor = Color(0xFFf4a647);
+                    if (index == 11) avatarColor = Constants.darkCyanColor;
+                    if (index == 12) avatarColor = Constants.darkPinkColor;
                     return Card(
                       color: Constants.darkListTileBackgroundColor,
                       child: ListTile(
@@ -140,7 +156,7 @@ class _HomeContentState extends State<HomeContent>
                           style: TextStyle(color: Constants.darkPinkColor),
                         ),
                         leading: CircleAvatar(
-                          backgroundColor: Constants.darkPinkColor,
+                          backgroundColor: avatarColor,
                           foregroundColor: Colors.white,
                           child: Text('AH'),
                         ),

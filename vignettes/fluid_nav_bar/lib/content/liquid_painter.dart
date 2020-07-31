@@ -92,8 +92,12 @@ class LiquidPainter extends CustomPainter {
 //    _drawLiquidSim(simulation1, canvas, size, 0, Color(0xffC48D3B).withOpacity(.4));
 //    _drawLiquidSim(simulation2, canvas, size, 5,  Color(0xff9D7B32).withOpacity(.4));
     _drawLiquidSim(
-        simulation1, canvas, size, 0, Colors.lightBlue.withOpacity(.4));
-    _drawLiquidSim(simulation2, canvas, size, 5, Colors.blue.withOpacity(.4));
+        simulation1, canvas, size, 0, Color(0xFFC7EAFF).withOpacity(.6));
+    _drawLiquidSim(
+        simulation2, canvas, size, 5, Color(0xFF99D3F7).withOpacity(.6));
+//    _drawLiquidSim(
+//        simulation1, canvas, size, 0, Colors.lightBlue.withOpacity(.4));
+//    _drawLiquidSim(simulation2, canvas, size, 5, Colors.blue.withOpacity(.4));
   }
 
   @override
@@ -125,16 +129,6 @@ class LiquidPainter extends CustomPainter {
 
     canvas.translate(-simulation.hzOffset * size.width, -offsetY);
     canvas.scale(1 / simulation.hzScale, 1);
-  }
-
-  void _drawOffsets(LiquidSimulation simulation, Canvas canvas, Size size) {
-    var floor = size.height;
-    simulation1.endPts.forEach((pt) {
-      canvas.drawCircle(sizeOffset(pt, size), 4, Paint()..color = Colors.red);
-    });
-    simulation1.ctrlPts.forEach((pt) {
-      canvas.drawCircle(sizeOffset(pt, size), 4, Paint()..color = Colors.green);
-    });
   }
 
   Offset sizeOffset(Offset pt, Size size) {

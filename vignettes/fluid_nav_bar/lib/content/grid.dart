@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shared/ui/placeholder/placeholder_image_with_text.dart';
 
+import '../constants.dart';
+
 class GridContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -13,7 +15,9 @@ class GridContent extends StatelessWidget {
         crossAxisCount: columnCount,
         children: List.generate(20, (index) {
           return PlaceholderImageWithText(
-              color: Color(0xFF99D3F7), backgroundColor: Color(0xFFC7EAFF));
+              color: Constants.darkBackgroundColor,
+              backgroundColor: Constants.darkBackgroundColor);
+//              color: Color(0xFF99D3F7), backgroundColor: Color(0xFFC7EAFF));
         }),
       ),
     );

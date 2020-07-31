@@ -1,9 +1,12 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 
 import '../constants.dart';
+import 'liquid_painter.dart';
 
 enum _State {
   timerInitial,
@@ -15,32 +18,97 @@ enum _State {
 final timeProvider = Provider((_) => '00:00:00');
 
 class StopwatchContent extends StatefulWidget {
+  final isOpen = true;
+  final requiredPoints = 100;
+  final earnedPoints = 68;
   @override
   _StopwatchContentState createState() => _StopwatchContentState();
 }
 
-class _StopwatchContentState extends State<StopwatchContent> {
+class _StopwatchContentState extends State<StopwatchContent>
+    with TickerProviderStateMixin {
   final StopWatchTimer _stopWatchTimer = StopWatchTimer(
 //    onChange: (value) => print('onChange $value'),
 //    onChangeSecond: (value) => print('onChangeSecond $value'),
 //    onChangeMinute: (value) => print('onChangeMinute $value'),
       );
-
   _State _timerState = _State.timerInitial;
+  bool _wasOpen = false;
+  Animation<double> _fillTween;
+  AnimationController _liquidSimController;
+
+  //Create 2 simulations, that will be passed to the LiquidPainter to be drawn.
+  LiquidSimulation _liquidSim1 = LiquidSimulation();
+  LiquidSimulation _liquidSim2 = LiquidSimulation();
+
+  double _screenHeight;
 
   @override
   void initState() {
     super.initState();
+    //Create a controller to drive the "fill" animations
+    _liquidSimController = AnimationController(
+        vsync: this, duration: Duration(milliseconds: 2000));
+    _liquidSimController.addListener(_rebuildIfOpen);
+    //create tween to raise the fill level of the card
+    _fillTween = Tween<double>(begin: 0, end: 1).animate(
+      CurvedAnimation(
+          parent: _liquidSimController,
+          curve: Interval(.12, .45, curve: Curves.easeOut)),
+//          curve: Interval(.12, .45, curve: Curves.easeOut)),
+    );
   }
 
   @override
   void dispose() async {
-    await _stopWatchTimer.dispose();
+    _stopWatchTimer.dispose();
+    _liquidSimController.dispose();
     super.dispose();
+  }
+
+  void _rebuildIfOpen() {
+    if (widget.isOpen) {
+      setState(() {});
+    }
+  }
+
+  Stack _buildLiquidBackground(double _maxFillLevel, double fillLevel) {
+    return Stack(
+      fit: StackFit.expand,
+      children: <Widget>[
+        Transform.translate(
+          offset: Offset(
+              0,
+              _screenHeight * 1.2 -
+                  _screenHeight * _fillTween.value * _maxFillLevel * 1.2),
+          child: CustomPaint(
+            painter: LiquidPainter(fillLevel, _liquidSim1, _liquidSim2,
+                waveHeight: 100),
+          ),
+        ),
+      ],
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    _screenHeight ??= MediaQuery.of(context).size.height;
+
+    //If our open state has changed...
+    if (widget.isOpen != _wasOpen) {
+      //Kickoff the fill animations if we're opening up
+      if (widget.isOpen) {
+        //Start both of the liquid simulations, they will initialize to random values
+        _liquidSim1.start(_liquidSimController, true);
+        _liquidSim2.start(_liquidSimController, false);
+      }
+      _wasOpen = widget.isOpen;
+    }
+
+    //Determine current fill level, based on _fillTween
+    double _maxFillLevel = min(1, widget.earnedPoints / widget.requiredPoints);
+    double fillLevel = _maxFillLevel; //_maxFillLevel * _fillTween.value;
+
     return Material(
       color: Colors.transparent,
       child: PlatformScaffold(
@@ -70,143 +138,160 @@ class _StopwatchContentState extends State<StopwatchContent> {
             elevation: 0,
           ),
         ),
-        body: Container(
-          padding: EdgeInsets.only(
-            left: 32,
-            right: 32,
-            top: 24,
-            bottom: 48,
-          ),
-          child: Center(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              mainAxisSize: MainAxisSize.max,
-              children: <Widget>[
-                Column(
+        body: Stack(
+          fit: StackFit.expand,
+          children: <Widget>[
+            AnimatedOpacity(
+              opacity: widget.isOpen ? 1 : 0,
+              duration: Duration(milliseconds: 500),
+              child: _buildLiquidBackground(_maxFillLevel, fillLevel),
+            ),
+
+            // Stopwatch content
+            Container(
+              padding: EdgeInsets.only(
+                left: 32,
+                right: 32,
+                top: 24,
+                bottom: 48,
+              ),
+              child: Center(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisSize: MainAxisSize.max,
                   children: <Widget>[
-                    PlatformButton(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 0, horizontal: 32),
-                      color: Constants.darkPinkColor,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          PlatformText(
-                            'Event',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Icon(
-                            Icons.edit,
-                            color: Colors.white,
-                            size: 20,
-                          ),
-                        ],
-                      ),
-                      onPressed: () {},
-                      materialFlat: (_, __) => MaterialFlatButtonData(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(50),
-                            side: BorderSide(color: Constants.darkPinkColor)),
-                      ),
-                      cupertino: (_, __) => CupertinoButtonData(
-                        color: Constants.darkPinkColor,
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                    ),
-                    SizedBox(height: 24),
-                    PlatformButton(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 0, horizontal: 32),
-                      color: Constants.darkPinkColor,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          PlatformText(
-                            'Lane 1',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Icon(
-                            Icons.edit,
-                            color: Colors.white,
-                            size: 20,
-                          ),
-                        ],
-                      ),
-                      onPressed: () {},
-                      materialFlat: (_, __) => MaterialFlatButtonData(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(50),
-                            side: BorderSide(color: Constants.darkPinkColor)),
-                      ),
-                      cupertino: (_, __) => CupertinoButtonData(
-                        color: Constants.darkPinkColor,
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                    ),
-                    SizedBox(height: 24),
-                    PlatformButton(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 0, horizontal: 32),
-                      color: Constants.darkPinkColor,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          PlatformText(
-                            'Mab Murphy-Midgely',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Icon(
-                            Icons.edit,
-                            color: Colors.white,
-                            size: 20,
-                          ),
-                        ],
-                      ),
-                      onPressed: () {},
-                      materialFlat: (_, __) => MaterialFlatButtonData(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(50),
-                            side: BorderSide(color: Constants.darkPinkColor)),
-                      ),
-                      cupertino: (_, __) => CupertinoButtonData(
-                        color: Constants.darkPinkColor,
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                    ),
-                  ],
-                ),
-                StreamBuilder<int>(
-                  stream: _stopWatchTimer.rawTime,
-                  initialData: _stopWatchTimer.rawTime.value,
-                  builder: (context, snap) {
-                    final value = snap.data;
-                    final displayTime = StopWatchTimer.getDisplayTime(value);
-                    return Column(
+                    Column(
                       children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: Text(
-                            displayTime,
-                            style: TextStyle(
+                        PlatformButton(
+                          padding:
+                              EdgeInsets.symmetric(vertical: 0, horizontal: 32),
+                          color: Constants.darkPinkColor,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              PlatformText(
+                                'Event',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Icon(
+                                Icons.edit,
                                 color: Colors.white,
-                                fontSize: 72,
-                                fontFamily: 'Helvetica',
-                                fontWeight: FontWeight.bold),
+                                size: 20,
+                              ),
+                            ],
+                          ),
+                          onPressed: () {},
+                          materialFlat: (_, __) => MaterialFlatButtonData(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(50),
+                                side:
+                                    BorderSide(color: Constants.darkPinkColor)),
+                          ),
+                          cupertino: (_, __) => CupertinoButtonData(
+                            color: Constants.darkPinkColor,
+                            borderRadius: BorderRadius.circular(50),
                           ),
                         ),
+                        SizedBox(height: 24),
+                        PlatformButton(
+                          padding:
+                              EdgeInsets.symmetric(vertical: 0, horizontal: 32),
+                          color: Constants.darkPinkColor,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              PlatformText(
+                                'Lane 1',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Icon(
+                                Icons.edit,
+                                color: Colors.white,
+                                size: 20,
+                              ),
+                            ],
+                          ),
+                          onPressed: () {},
+                          materialFlat: (_, __) => MaterialFlatButtonData(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(50),
+                                side:
+                                    BorderSide(color: Constants.darkPinkColor)),
+                          ),
+                          cupertino: (_, __) => CupertinoButtonData(
+                            color: Constants.darkPinkColor,
+                            borderRadius: BorderRadius.circular(50),
+                          ),
+                        ),
+                        SizedBox(height: 24),
+                        PlatformButton(
+                          padding:
+                              EdgeInsets.symmetric(vertical: 0, horizontal: 32),
+                          color: Constants.darkPinkColor,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              PlatformText(
+                                'Mab Midgely',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Icon(
+                                Icons.edit,
+                                color: Colors.white,
+                                size: 20,
+                              ),
+                            ],
+                          ),
+                          onPressed: () {},
+                          materialFlat: (_, __) => MaterialFlatButtonData(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(50),
+                                side:
+                                    BorderSide(color: Constants.darkPinkColor)),
+                          ),
+                          cupertino: (_, __) => CupertinoButtonData(
+                            color: Constants.darkPinkColor,
+                            borderRadius: BorderRadius.circular(50),
+                          ),
+                        ),
+                      ],
+                    ),
+                    StreamBuilder<int>(
+                      stream: _stopWatchTimer.rawTime,
+                      initialData: _stopWatchTimer.rawTime.value,
+                      builder: (context, snap) {
+                        final value = snap.data;
+                        final displayTime =
+                            StopWatchTimer.getDisplayTime(value);
+                        return Column(
+                          children: <Widget>[
+                            SizedBox(
+                              height: 16,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8),
+                              child: Text(
+                                displayTime,
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 72,
+                                    fontFamily: 'Helvetica',
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
 //                        Padding(
 //                          padding: const EdgeInsets.all(8),
 //                          child: Text(
@@ -217,10 +302,10 @@ class _StopwatchContentState extends State<StopwatchContent> {
 //                                fontWeight: FontWeight.w400),
 //                          ),
 //                        ),
-                      ],
-                    );
-                  },
-                ),
+                          ],
+                        );
+                      },
+                    ),
 //                PlatformText(
 //                  '00:00:00',
 //                  style: TextStyle(
@@ -229,140 +314,150 @@ class _StopwatchContentState extends State<StopwatchContent> {
 //                    fontWeight: FontWeight.bold,
 //                  ),
 //                ),
-                if (_timerState == _State.timerInitial)
-                  PlatformButton(
-                    padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-                    color: Colors.green,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        PlatformText(
-                          'START',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 36,
-                            fontWeight: FontWeight.bold,
-                          ),
+                    if (_timerState == _State.timerInitial)
+                      PlatformButton(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                        color: Colors.green,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            PlatformText(
+                              'START',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 36,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                    onPressed: () {
-                      _stopWatchTimer.onExecute.add(StopWatchExecute.start);
-                      setState(() {
-                        _timerState = _State.timerRunInProgress;
-                      });
-                    },
-                    materialFlat: (_, __) => MaterialFlatButtonData(
-                      shape: const StadiumBorder(),
+                        onPressed: () {
+                          setState(() {
+                            _stopWatchTimer.onExecute
+                                .add(StopWatchExecute.start);
+                            //Run the animation controller, kicking off all tweens
+                            _liquidSimController.forward(from: 0);
+                            _timerState = _State.timerRunInProgress;
+                          });
+                        },
+                        materialFlat: (_, __) => MaterialFlatButtonData(
+                          shape: const StadiumBorder(),
 //                    RoundedRectangleBorder(
 //                        borderRadius: BorderRadius.circular(50),
 //                        side: BorderSide(color: Constants.darkCyanColor)),
-                    ),
-                    cupertino: (_, __) => CupertinoButtonData(
-                      color: Colors.green,
-                      borderRadius: BorderRadius.circular(50),
-                    ),
-                  ),
-                if (_timerState == _State.timerRunInProgress)
-                  PlatformButton(
-                    padding: EdgeInsets.symmetric(
-                      vertical: 16,
-                      horizontal: 16,
-                    ),
-                    color: Colors.red,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        PlatformText(
-                          'STOP',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 36,
-                            fontWeight: FontWeight.bold,
-                          ),
                         ),
-                      ],
-                    ),
-                    onPressed: () {
-                      _stopWatchTimer.onExecute.add(StopWatchExecute.stop);
-                      setState(() {
-                        _timerState = _State.timerRunPause;
-                      });
-                    },
-                    materialFlat: (_, __) => MaterialFlatButtonData(
-                      shape: const StadiumBorder(),
-//                    RoundedRectangleBorder(
-//                        borderRadius: BorderRadius.circular(50),
-//                        side: BorderSide(color: Constants.darkCyanColor)),
-                    ),
-                    cupertino: (_, __) => CupertinoButtonData(
-                      color: Colors.red,
-                      borderRadius: BorderRadius.circular(50),
-                    ),
-                  ),
-                if (_timerState == _State.timerRunPause)
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: <Widget>[
+                        cupertino: (_, __) => CupertinoButtonData(
+                          color: Colors.green,
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                      ),
+                    if (_timerState == _State.timerRunInProgress)
                       PlatformButton(
                         padding: EdgeInsets.symmetric(
                           vertical: 16,
                           horizontal: 16,
                         ),
-                        color: Colors.lightBlue,
-                        child: Icon(
-                          Icons.refresh,
-                          color: Colors.white,
-                          size: 42,
-                        ),
-                        onPressed: () {
-                          _stopWatchTimer.onExecute.add(StopWatchExecute.reset);
-                          setState(() {
-                            _timerState = _State.timerInitial;
-                          });
-                        },
-                        materialFlat: (_, __) => MaterialFlatButtonData(
-                          shape: const StadiumBorder(),
-                        ),
-                        cupertino: (_, __) => CupertinoButtonData(
-                          color: Colors.lightBlue,
-                          borderRadius: BorderRadius.circular(50),
-                        ),
-                      ),
-                      PlatformButton(
-                        padding: EdgeInsets.symmetric(
-                          vertical: 16,
-                          horizontal: 32,
-                        ),
                         color: Colors.red,
-                        child: PlatformText(
-                          'FINISH',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 36,
-                            fontWeight: FontWeight.bold,
-                          ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            PlatformText(
+                              'STOP',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 36,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
                         ),
                         onPressed: () {
-                          _stopWatchTimer.onExecute.add(StopWatchExecute.reset);
+                          _stopWatchTimer.onExecute.add(StopWatchExecute.stop);
+                          //Run the animation controller in reverse, kicking off all tweens
+                          _liquidSimController.reverse();
                           setState(() {
-                            _timerState = _State.timerRunComplete;
-                            Navigator.pop(context);
+                            _timerState = _State.timerRunPause;
                           });
                         },
                         materialFlat: (_, __) => MaterialFlatButtonData(
                           shape: const StadiumBorder(),
+//                    RoundedRectangleBorder(
+//                        borderRadius: BorderRadius.circular(50),
+//                        side: BorderSide(color: Constants.darkCyanColor)),
                         ),
                         cupertino: (_, __) => CupertinoButtonData(
                           color: Colors.red,
                           borderRadius: BorderRadius.circular(50),
                         ),
                       ),
-                    ],
-                  )
-              ],
+                    if (_timerState == _State.timerRunPause)
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: <Widget>[
+                          PlatformButton(
+                            padding: EdgeInsets.symmetric(
+                              vertical: 16,
+                              horizontal: 16,
+                            ),
+                            color: Colors.lightBlue,
+                            child: Icon(
+                              Icons.refresh,
+                              color: Colors.white,
+                              size: 42,
+                            ),
+                            onPressed: () {
+                              _stopWatchTimer.onExecute
+                                  .add(StopWatchExecute.reset);
+                              setState(() {
+                                _timerState = _State.timerInitial;
+                              });
+                            },
+                            materialFlat: (_, __) => MaterialFlatButtonData(
+                              shape: const StadiumBorder(),
+                            ),
+                            cupertino: (_, __) => CupertinoButtonData(
+                              color: Colors.lightBlue,
+                              borderRadius: BorderRadius.circular(50),
+                            ),
+                          ),
+                          PlatformButton(
+                            padding: EdgeInsets.symmetric(
+                              vertical: 16,
+                              horizontal: 32,
+                            ),
+                            color: Colors.red,
+                            child: PlatformText(
+                              'FINISH',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 36,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            onPressed: () {
+                              _stopWatchTimer.onExecute
+                                  .add(StopWatchExecute.reset);
+                              setState(() {
+                                _timerState = _State.timerRunComplete;
+                                Navigator.pop(context);
+                              });
+                            },
+                            materialFlat: (_, __) => MaterialFlatButtonData(
+                              shape: const StadiumBorder(),
+                            ),
+                            cupertino: (_, __) => CupertinoButtonData(
+                              color: Colors.red,
+                              borderRadius: BorderRadius.circular(50),
+                            ),
+                          ),
+                        ],
+                      )
+                  ],
+                ),
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );
