@@ -1,14 +1,29 @@
-import 'package:fluid_nav_bar/themes/gallery_theme_data.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import './demo.dart';
 import 'constants.dart';
 import 'data/gallery_options.dart';
+import 'model/swimmer_account.dart';
+import 'themes/gallery_theme_data.dart';
+
+/// Create a swimmer account list and initialize it with pre-defined values
+///
+final swimmerAccountListProvider = StateNotifierProvider((ref) {
+  return SwimmerAccountList([
+    SwimmerAccount(
+      firstName: 'Susie',
+      lastName: "O'Neill",
+      dateOfBirth: '19730802',
+      gender: Gender.female,
+    )
+  ]);
+});
 
 void main() {
-  runApp(App());
+  runApp(const ProviderScope(child: App()));
 }
 
 class App extends StatelessWidget {

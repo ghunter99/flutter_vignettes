@@ -20,8 +20,8 @@ class _FluidNavBarDemoState extends State {
 
   @override
   void initState() {
-    _child = HomeContent();
     super.initState();
+    _child = HomeContent();
   }
 
   @override
@@ -35,16 +35,16 @@ class _FluidNavBarDemoState extends State {
           body: _child,
           floatingActionButton: FloatingActionButton(
             onPressed: () {
-              Navigator.of(context).push(_createRoute());
+              Navigator.of(context).push<void>(_createRoute());
             },
             tooltip: 'RACE TIMER',
+            foregroundColor: Colors.white,
+            backgroundColor: Constants.darkCyanColor,
             child: Icon(
               Icons.timer,
               size: 42,
               color: Colors.white,
             ),
-            foregroundColor: Colors.white,
-            backgroundColor: Constants.darkCyanColor,
           ),
           bottomNavigationBar: FluidNavBar(onChange: _handleNavigationChange),
         ),
@@ -53,15 +53,15 @@ class _FluidNavBarDemoState extends State {
   }
 
   Route _createRoute() {
-    return PageRouteBuilder(
+    return PageRouteBuilder<void>(
       pageBuilder: (context, animation, secondaryAnimation) =>
           StopwatchContent(),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        var begin = Offset(0.0, 1.0);
-        var end = Offset.zero;
-        var curve = Curves.ease;
+        const begin = Offset(0.0, 1.0);
+        final end = Offset.zero;
+        final curve = Curves.ease;
 
-        var tween =
+        final tween =
             Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
 
         return SlideTransition(
@@ -88,7 +88,7 @@ class _FluidNavBarDemoState extends State {
       _child = AnimatedSwitcher(
         switchInCurve: Curves.easeOut,
         switchOutCurve: Curves.easeIn,
-        duration: Duration(milliseconds: 500),
+        duration: const Duration(milliseconds: 500),
         child: _child,
       );
     });

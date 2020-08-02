@@ -36,6 +36,7 @@ set deviceLocale(Locale locale) {
   _deviceLocale ??= locale;
 }
 
+@immutable
 class GalleryOptions {
   const GalleryOptions({
     this.themeMode,
@@ -85,7 +86,9 @@ class GalleryOptions {
     switch (customTextDirection) {
       case CustomTextDirection.localeBased:
         final language = locale?.languageCode?.toLowerCase();
-        if (language == null) return null;
+        if (language == null) {
+          return null;
+        }
         return rtlLanguages.contains(language)
             ? TextDirection.rtl
             : TextDirection.ltr;
@@ -186,7 +189,7 @@ class ApplyTextOptions extends StatelessWidget {
     final textDirection = options.resolvedTextDirection();
     final textScaleFactor = options.textScaleFactor(context);
 
-    Widget widget = MediaQuery(
+    final Widget widget = MediaQuery(
       data: MediaQuery.of(context).copyWith(
         textScaleFactor: textScaleFactor,
       ),
@@ -205,11 +208,11 @@ class ApplyTextOptions extends StatelessWidget {
 // See https://medium.com/flutter/managing-flutter-application-state-with-inheritedwidgets-1140452befe1
 
 class _ModelBindingScope extends InheritedWidget {
-  _ModelBindingScope({
+  const _ModelBindingScope({
     Key key,
     @required this.modelBindingState,
     Widget child,
-  })  : assert(modelBindingState != null),
+  })  : assert(modelBindingState != null, 'modeBindingState must not be null'),
         super(key: key, child: child);
 
   final _ModelBindingState modelBindingState;
@@ -219,11 +222,11 @@ class _ModelBindingScope extends InheritedWidget {
 }
 
 class ModelBinding extends StatefulWidget {
-  ModelBinding({
+  const ModelBinding({
     Key key,
     this.initialModel = const GalleryOptions(),
     this.child,
-  })  : assert(initialModel != null),
+  })  : assert(initialModel != null, 'InitialModel must not be null'),
         super(key: key);
 
   final GalleryOptions initialModel;

@@ -5,14 +5,14 @@ import './fluid_button.dart';
 import './fluid_icon.dart';
 import 'constants.dart';
 
-typedef void FluidNavBarChangeCallback(int selectedIndex);
+typedef FluidNavBarChangeCallback = Function(int selectedIndex);
 
 class FluidNavBar extends StatefulWidget {
+  const FluidNavBar({this.onChange});
+
   static const double nominalHeight = 56.0;
 
   final FluidNavBarChangeCallback onChange;
-
-  FluidNavBar({this.onChange});
 
   @override
   State createState() => _FluidNavBarState();
@@ -60,7 +60,7 @@ class _FluidNavBarState extends State<FluidNavBar>
     // The fluid nav bar consists of two components, the liquid background pane and the buttons
     // Build a stack with the buttons overlayed on top of the background pane
     final appSize = MediaQuery.of(context).size;
-    final height = FluidNavBar.nominalHeight;
+    const height = FluidNavBar.nominalHeight;
     return Container(
       width: appSize.width,
       height: FluidNavBar.nominalHeight,
@@ -90,7 +90,7 @@ class _FluidNavBarState extends State<FluidNavBar>
 
   Widget _buildBackground() {
     // This widget acts purely as a container that controlls how the `_BackgroundCurvePainter` draws
-    final inCurve = ElasticOutCurve(0.38);
+    const inCurve = ElasticOutCurve(0.38);
     return CustomPaint(
       painter: _BackgroundCurvePainter(
         _xController.value * MediaQuery.of(context).size.width,
@@ -104,15 +104,18 @@ class _FluidNavBarState extends State<FluidNavBar>
   }
 
   List<FluidNavBarButton> _buildButtons() {
-    List<FluidFillIconData> icons = [
+    final List<FluidFillIconData> icons = [
       FluidFillIcons.home,
       FluidFillIcons.user,
       FluidFillIcons.window,
     ];
-    var buttons = List<FluidNavBarButton>(3);
+    final buttons = List<FluidNavBarButton>(3);
     for (var i = 0; i < 3; ++i) {
       buttons[i] = FluidNavBarButton(
-          icons[i], _selectedIndex == i, () => _handlePressed(i));
+        icons[i],
+        () => _handlePressed(i),
+        selected: _selectedIndex == i,
+      );
     }
     return buttons;
   }
@@ -138,7 +141,9 @@ class _FluidNavBarState extends State<FluidNavBar>
   }
 
   void _handlePressed(int index) {
-    if (_selectedIndex == index || _xController.isAnimating) return;
+    if (_selectedIndex == index || _xController.isAnimating) {
+      return;
+    }
 
     setState(() {
       _selectedIndex = index;
@@ -147,14 +152,15 @@ class _FluidNavBarState extends State<FluidNavBar>
     _yController.value = 1.0;
     _xController.animateTo(
         _indexToPosition(index) / MediaQuery.of(context).size.width,
-        duration: Duration(milliseconds: 620));
+        duration: const Duration(milliseconds: 620));
     Future.delayed(
-      Duration(milliseconds: 500),
+      const Duration(milliseconds: 500),
       () {
-        _yController.animateTo(1.0, duration: Duration(milliseconds: 1200));
+        _yController.animateTo(1.0,
+            duration: const Duration(milliseconds: 1200));
       },
     );
-    _yController.animateTo(0.0, duration: Duration(milliseconds: 300));
+    _yController.animateTo(0.0, duration: const Duration(milliseconds: 300));
 
     if (widget.onChange != null) {
       widget.onChange(index);
@@ -165,6 +171,11 @@ class _FluidNavBarState extends State<FluidNavBar>
 class _BackgroundCurvePainter extends CustomPainter {
   // Top: 0.6 point, 0.35 horizontal
   // Bottom:
+
+  _BackgroundCurvePainter(double x, double normalizedY, Color color)
+      : _x = x,
+        _normalizedY = normalizedY,
+        _color = color;
 
   static const _radiusTop = 54.0;
   static const _radiusBottom = 44.0;
@@ -181,15 +192,10 @@ class _BackgroundCurvePainter extends CustomPainter {
   final double _normalizedY;
   final Color _color;
 
-  _BackgroundCurvePainter(double x, double normalizedY, Color color)
-      : _x = x,
-        _normalizedY = normalizedY,
-        _color = color;
-
   @override
   void paint(canvas, size) {
     // Paint two cubic bezier curves using various linear interpolations based off of the `_normalizedY` value
-    final norm = LinearPointCurve(0.5, 2.0).transform(_normalizedY) / 2;
+    final norm = const LinearPointCurve(0.5, 2.0).transform(_normalizedY) / 2;
 
     final radius =
         Tween<double>(begin: _radiusTop, end: _radiusBottom).transform(norm);
@@ -197,15 +203,15 @@ class _BackgroundCurvePainter extends CustomPainter {
     final anchorControlOffset = Tween<double>(
             begin: radius * _horizontalControlTop,
             end: radius * _horizontalControlBottom)
-        .transform(LinearPointCurve(0.5, 0.75).transform(norm));
+        .transform(const LinearPointCurve(0.5, 0.75).transform(norm));
     // Point that slides up and down depending on distance for the target x position
     final dipControlOffset = Tween<double>(
             begin: radius * _pointControlTop, end: radius * _pointControlBottom)
-        .transform(LinearPointCurve(0.5, 0.8).transform(norm));
+        .transform(const LinearPointCurve(0.5, 0.8).transform(norm));
     final y = Tween<double>(begin: _topY, end: _bottomY)
-        .transform(LinearPointCurve(0.2, 0.7).transform(norm));
+        .transform(const LinearPointCurve(0.2, 0.7).transform(norm));
     final dist = Tween<double>(begin: _topDistance, end: _bottomDistance)
-        .transform(LinearPointCurve(0.5, 0.0).transform(norm));
+        .transform(const LinearPointCurve(0.5, 0.0).transform(norm));
     final x0 = _x - dist / 2;
     final x1 = _x + dist / 2;
 

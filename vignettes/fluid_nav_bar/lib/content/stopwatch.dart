@@ -38,8 +38,8 @@ class _StopwatchContentState extends State<StopwatchContent>
   AnimationController _liquidSimController;
 
   //Create 2 simulations, that will be passed to the LiquidPainter to be drawn.
-  LiquidSimulation _liquidSim1 = LiquidSimulation();
-  LiquidSimulation _liquidSim2 = LiquidSimulation();
+  final LiquidSimulation _liquidSim1 = LiquidSimulation();
+  final LiquidSimulation _liquidSim2 = LiquidSimulation();
 
   double _screenHeight;
 
@@ -48,7 +48,7 @@ class _StopwatchContentState extends State<StopwatchContent>
     super.initState();
     //Create a controller to drive the "fill" animations
     _liquidSimController = AnimationController(
-        vsync: this, duration: Duration(milliseconds: 2000));
+        vsync: this, duration: const Duration(milliseconds: 2000));
     _liquidSimController.addListener(_rebuildIfOpen);
     //create tween to raise the fill level of the card
     _fillTween = Tween<double>(begin: 0, end: 1).animate(
@@ -60,7 +60,7 @@ class _StopwatchContentState extends State<StopwatchContent>
   }
 
   @override
-  void dispose() async {
+  void dispose() {
     _stopWatchTimer.dispose();
     _liquidSimController.dispose();
     super.dispose();
@@ -99,15 +99,16 @@ class _StopwatchContentState extends State<StopwatchContent>
       //Kickoff the fill animations if we're opening up
       if (widget.isOpen) {
         //Start both of the liquid simulations, they will initialize to random values
-        _liquidSim1.start(_liquidSimController, true);
-        _liquidSim2.start(_liquidSimController, false);
+        _liquidSim1.start(_liquidSimController, flipY: true);
+        _liquidSim2.start(_liquidSimController, flipY: false);
       }
       _wasOpen = widget.isOpen;
     }
 
     //Determine current fill level, based on _fillTween
-    double _maxFillLevel = min(1, widget.earnedPoints / widget.requiredPoints);
-    double fillLevel = _maxFillLevel; //_maxFillLevel * _fillTween.value;
+    final double _maxFillLevel =
+        min(1, widget.earnedPoints / widget.requiredPoints);
+    final double fillLevel = _maxFillLevel; //_maxFillLevel * _fillTween.value;
 
     return Material(
       color: Colors.transparent,
@@ -131,7 +132,7 @@ class _StopwatchContentState extends State<StopwatchContent>
             )
           ],
           cupertino: (_, __) => CupertinoNavigationBarData(
-            border: Border(),
+            border: const Border(),
             transitionBetweenRoutes: false,
           ),
           material: (_, __) => MaterialAppBarData(
@@ -143,13 +144,13 @@ class _StopwatchContentState extends State<StopwatchContent>
           children: <Widget>[
             AnimatedOpacity(
               opacity: widget.isOpen ? 1 : 0,
-              duration: Duration(milliseconds: 500),
+              duration: const Duration(milliseconds: 500),
               child: _buildLiquidBackground(_maxFillLevel, fillLevel),
             ),
 
             // Stopwatch content
             Container(
-              padding: EdgeInsets.only(
+              padding: const EdgeInsets.only(
                 left: 32,
                 right: 32,
                 top: 24,
@@ -164,9 +165,20 @@ class _StopwatchContentState extends State<StopwatchContent>
                     Column(
                       children: <Widget>[
                         PlatformButton(
-                          padding:
-                              EdgeInsets.symmetric(vertical: 0, horizontal: 32),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 0, horizontal: 32),
                           color: Constants.darkPinkColor,
+                          onPressed: () {},
+                          materialFlat: (_, __) => MaterialFlatButtonData(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(50),
+                                side:
+                                    BorderSide(color: Constants.darkPinkColor)),
+                          ),
+                          cupertino: (_, __) => CupertinoButtonData(
+                            color: Constants.darkPinkColor,
+                            borderRadius: BorderRadius.circular(50),
+                          ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
@@ -185,6 +197,12 @@ class _StopwatchContentState extends State<StopwatchContent>
                               ),
                             ],
                           ),
+                        ),
+                        const SizedBox(height: 24),
+                        PlatformButton(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 0, horizontal: 32),
+                          color: Constants.darkPinkColor,
                           onPressed: () {},
                           materialFlat: (_, __) => MaterialFlatButtonData(
                             shape: RoundedRectangleBorder(
@@ -196,12 +214,6 @@ class _StopwatchContentState extends State<StopwatchContent>
                             color: Constants.darkPinkColor,
                             borderRadius: BorderRadius.circular(50),
                           ),
-                        ),
-                        SizedBox(height: 24),
-                        PlatformButton(
-                          padding:
-                              EdgeInsets.symmetric(vertical: 0, horizontal: 32),
-                          color: Constants.darkPinkColor,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
@@ -220,6 +232,12 @@ class _StopwatchContentState extends State<StopwatchContent>
                               ),
                             ],
                           ),
+                        ),
+                        const SizedBox(height: 24),
+                        PlatformButton(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 0, horizontal: 32),
+                          color: Constants.darkPinkColor,
                           onPressed: () {},
                           materialFlat: (_, __) => MaterialFlatButtonData(
                             shape: RoundedRectangleBorder(
@@ -231,12 +249,6 @@ class _StopwatchContentState extends State<StopwatchContent>
                             color: Constants.darkPinkColor,
                             borderRadius: BorderRadius.circular(50),
                           ),
-                        ),
-                        SizedBox(height: 24),
-                        PlatformButton(
-                          padding:
-                              EdgeInsets.symmetric(vertical: 0, horizontal: 32),
-                          color: Constants.darkPinkColor,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
@@ -255,17 +267,6 @@ class _StopwatchContentState extends State<StopwatchContent>
                               ),
                             ],
                           ),
-                          onPressed: () {},
-                          materialFlat: (_, __) => MaterialFlatButtonData(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(50),
-                                side:
-                                    BorderSide(color: Constants.darkPinkColor)),
-                          ),
-                          cupertino: (_, __) => CupertinoButtonData(
-                            color: Constants.darkPinkColor,
-                            borderRadius: BorderRadius.circular(50),
-                          ),
                         ),
                       ],
                     ),
@@ -278,7 +279,7 @@ class _StopwatchContentState extends State<StopwatchContent>
                             StopWatchTimer.getDisplayTime(value);
                         return Column(
                           children: <Widget>[
-                            SizedBox(
+                            const SizedBox(
                               height: 16,
                             ),
                             Padding(
@@ -287,7 +288,7 @@ class _StopwatchContentState extends State<StopwatchContent>
                                 displayTime,
                                 style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: 72,
+                                    fontSize: 56,
                                     fontFamily: 'Helvetica',
                                     fontWeight: FontWeight.bold),
                               ),
@@ -316,22 +317,9 @@ class _StopwatchContentState extends State<StopwatchContent>
 //                ),
                     if (_timerState == _State.timerInitial)
                       PlatformButton(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 16, horizontal: 16),
                         color: Colors.green,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            PlatformText(
-                              'START',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 36,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
                         onPressed: () {
                           setState(() {
                             _stopWatchTimer.onExecute
@@ -351,19 +339,11 @@ class _StopwatchContentState extends State<StopwatchContent>
                           color: Colors.green,
                           borderRadius: BorderRadius.circular(50),
                         ),
-                      ),
-                    if (_timerState == _State.timerRunInProgress)
-                      PlatformButton(
-                        padding: EdgeInsets.symmetric(
-                          vertical: 16,
-                          horizontal: 16,
-                        ),
-                        color: Colors.red,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
                             PlatformText(
-                              'STOP',
+                              'START',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 36,
@@ -372,6 +352,14 @@ class _StopwatchContentState extends State<StopwatchContent>
                             ),
                           ],
                         ),
+                      ),
+                    if (_timerState == _State.timerRunInProgress)
+                      PlatformButton(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 16,
+                          horizontal: 16,
+                        ),
+                        color: Colors.red,
                         onPressed: () {
                           _stopWatchTimer.onExecute.add(StopWatchExecute.stop);
                           //Run the animation controller in reverse, kicking off all tweens
@@ -390,22 +378,30 @@ class _StopwatchContentState extends State<StopwatchContent>
                           color: Colors.red,
                           borderRadius: BorderRadius.circular(50),
                         ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            PlatformText(
+                              'STOP',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 36,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     if (_timerState == _State.timerRunPause)
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: <Widget>[
                           PlatformButton(
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
                               vertical: 16,
                               horizontal: 16,
                             ),
                             color: Colors.lightBlue,
-                            child: Icon(
-                              Icons.refresh,
-                              color: Colors.white,
-                              size: 42,
-                            ),
                             onPressed: () {
                               _stopWatchTimer.onExecute
                                   .add(StopWatchExecute.reset);
@@ -420,21 +416,18 @@ class _StopwatchContentState extends State<StopwatchContent>
                               color: Colors.lightBlue,
                               borderRadius: BorderRadius.circular(50),
                             ),
+                            child: Icon(
+                              Icons.refresh,
+                              color: Colors.white,
+                              size: 42,
+                            ),
                           ),
                           PlatformButton(
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
                               vertical: 16,
                               horizontal: 32,
                             ),
                             color: Colors.red,
-                            child: PlatformText(
-                              'FINISH',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 36,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
                             onPressed: () {
                               _stopWatchTimer.onExecute
                                   .add(StopWatchExecute.reset);
@@ -449,6 +442,14 @@ class _StopwatchContentState extends State<StopwatchContent>
                             cupertino: (_, __) => CupertinoButtonData(
                               color: Colors.red,
                               borderRadius: BorderRadius.circular(50),
+                            ),
+                            child: PlatformText(
+                              'FINISH',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 36,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                         ],

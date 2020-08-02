@@ -1,30 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class AccountContent extends StatelessWidget {
+import '../main.dart';
+
+class AccountContent extends HookWidget {
   Widget _buildAddSwimmerButton(BuildContext context) {
     Widget button = PlatformButton(
-      padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
       color: Colors.transparent,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          Icon(
-            Icons.add,
-            color: Colors.white,
-            size: 18,
-          ),
-          SizedBox(
-            width: 8,
-          ),
-          PlatformText(
-            'Swimmer',
-            style: TextStyle(
-              color: Colors.white,
-            ),
-          ),
-        ],
-      ),
       onPressed: () {},
       materialFlat: (_, __) => MaterialFlatButtonData(
         shape: const StadiumBorder(
@@ -36,6 +21,25 @@ class AccountContent extends StatelessWidget {
       cupertino: (_, __) => CupertinoButtonData(
         color: Colors.transparent,
         borderRadius: BorderRadius.circular(50),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          Icon(
+            Icons.add,
+            color: Colors.white,
+            size: 18,
+          ),
+          const SizedBox(
+            width: 8,
+          ),
+          PlatformText(
+            'Swimmer',
+            style: const TextStyle(
+              color: Colors.white,
+            ),
+          ),
+        ],
       ),
     );
     var wrapWithStadiumBorder = false;
@@ -66,12 +70,14 @@ class AccountContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final swimmers = useProvider(swimmerAccountListProvider.state);
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            SizedBox(
+            const SizedBox(
               width: 1,
             ),
             Padding(
@@ -79,23 +85,32 @@ class AccountContent extends StatelessWidget {
               child: _buildAddSwimmerButton(context),
             )
           ],
-        )
+        ),
+        Expanded(
+          child: Container(
+            padding: EdgeInsets.only(left: 20, right: 20, top: 20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: swimmers.length,
+                    itemBuilder: (content, index) {
+                      return Card(
+                        color: Colors.red,
+                        child: ListTile(
+                          title: Text(swimmers[index].firstName),
+                          subtitle: Text(swimmers[index].dateOfBirth),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
       ],
     );
-//    return Container(
-//      padding: EdgeInsets.only(left: 20, right: 20, top: 20),
-//      child: ListView.builder(
-//        itemCount: 9,
-//        itemBuilder: (content, index) {
-//          return Container(
-//            padding: EdgeInsets.symmetric(vertical: 12),
-//            child: PlaceholderCardShort(
-//                color: Constants.darkBackgroundColor,
-//                backgroundColor: Constants.darkBackgroundColor),
-////            child: PlaceholderCardShort(color: Color(0xFF99D3F7), backgroundColor: Color(0xFFC7EAFF)),
-//          );
-//        },
-//      ),
-//    );
   }
 }

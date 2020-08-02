@@ -13,12 +13,16 @@ enum Gender {
 /// A read-only description of a swimmer account
 class SwimmerAccount {
   SwimmerAccount({
-    this.firstName,
-    this.lastName,
-    this.dateOfBirth,
-    this.gender = Gender.female,
+    @required this.firstName,
+    @required this.lastName,
+    @required this.dateOfBirth,
+    @required this.gender,
     String id,
-  }) : id = id ?? _uuid.v4();
+  })  : assert(firstName != null, 'First name can not be null'),
+        assert(lastName != null, 'Last name can not be null'),
+        assert(dateOfBirth != null, 'Date of birth can not be null'),
+        assert(gender != null, 'Gender can not be null'),
+        id = id ?? _uuid.v4();
 
   final String id;
   final String firstName;
@@ -28,7 +32,7 @@ class SwimmerAccount {
 
   @override
   String toString() {
-    return 'Swimmer(\'$firstName $lastName\', DOB: $dateOfBirth, Gender:$gender)';
+    return "Swimmer('$firstName $lastName', DOB: $dateOfBirth, Gender:$gender)";
   }
 }
 

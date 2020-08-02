@@ -8,6 +8,12 @@ import './fluid_icon_data.dart';
 export './fluid_icon_data.dart';
 
 class FluidFillIcon extends StatelessWidget {
+  const FluidFillIcon(
+      FluidFillIconData iconData, double fillAmount, double scaleY)
+      : _iconData = iconData,
+        _fillAmount = fillAmount,
+        _scaleY = scaleY;
+
   static const double iconDataScale = 0.9;
 
   final FluidFillIconData _iconData;
@@ -16,11 +22,6 @@ class FluidFillIcon extends StatelessWidget {
   final double _fillAmount;
 
   final double _scaleY;
-
-  FluidFillIcon(FluidFillIconData iconData, double fillAmount, double scaleY)
-      : _iconData = iconData,
-        _fillAmount = fillAmount,
-        _scaleY = scaleY;
 
   @override
   Widget build(context) {
@@ -31,14 +32,14 @@ class FluidFillIcon extends StatelessWidget {
 }
 
 class _FluidFillIconPainter extends CustomPainter {
-  List<ui.Path> _paths;
-  double _fillAmount;
-  double _scaleY;
-
   _FluidFillIconPainter(List<ui.Path> paths, double fillAmount, double scaleY)
       : _paths = paths,
         _fillAmount = fillAmount,
         _scaleY = scaleY;
+
+  final List<ui.Path> _paths;
+  final double _fillAmount;
+  final double _scaleY;
 
   @override
   void paint(canvas, size) {

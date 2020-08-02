@@ -1,31 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 
 import '../constants.dart';
 
-class HomeContent extends StatefulWidget {
-  @override
-  _HomeContentState createState() => _HomeContentState();
-}
-
-class _HomeContentState extends State<HomeContent>
-    with TickerProviderStateMixin {
-  TabController _tabController;
-
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(length: 2, vsync: this);
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _tabController.dispose();
-  }
-
+class HomeContent extends HookWidget {
   @override
   Widget build(context) {
-    double screenHeight = MediaQuery.of(context).size.height;
+    final tabController = useTabController(
+      initialLength: 2,
+    );
 
     // do not show ripple on button tap for iOS or macOS
     var color = Colors.transparent;
@@ -42,6 +25,10 @@ class _HomeContentState extends State<HomeContent>
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
+        Container(
+          height: 44,
+          color: Constants.darkBackgroundColor,
+        ),
         Material(
           color: Constants.darkPinkColor,
           child: Container(
@@ -49,7 +36,7 @@ class _HomeContentState extends State<HomeContent>
             color: color,
             padding: const EdgeInsets.symmetric(vertical: 8.0),
             child: TabBar(
-              controller: _tabController,
+              controller: tabController,
               labelColor: Constants.darkPinkColor,
               unselectedLabelColor: Constants.darkUnselectedTabLabelColor,
               indicatorSize: TabBarIndicatorSize.label,
@@ -59,32 +46,22 @@ class _HomeContentState extends State<HomeContent>
                 color: Colors.white,
               ),
 //            isScrollable: true,
-              tabs: <Widget>[
+              tabs: const <Widget>[
                 Tab(
-                  child: Container(
-//                  decoration: BoxDecoration(
-//                      borderRadius: BorderRadius.circular(50),
-//                      border: Border.all(color: Colors.white, width: 1)),
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Text(
-                        "FAMILIES",
-                        style: TextStyle(fontSize: 15),
-                      ),
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      'FAMILIES',
+                      style: TextStyle(fontSize: 15),
                     ),
                   ),
                 ),
                 Tab(
-                  child: Container(
-//                  decoration: BoxDecoration(
-//                      borderRadius: BorderRadius.circular(50),
-//                      border: Border.all(color: Colors.redAccent, width: 1)),
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Text(
-                        "SWIMMERS",
-                        style: TextStyle(fontSize: 15),
-                      ),
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      'SWIMMERS',
+                      style: TextStyle(fontSize: 15),
                     ),
                   ),
                 ),
@@ -92,80 +69,80 @@ class _HomeContentState extends State<HomeContent>
             ),
           ),
         ),
-        Container(
-          height: screenHeight - 66,
-          child: TabBarView(
-            controller: _tabController,
-            children: [
-              Container(
-                padding: EdgeInsets.only(left: 20, right: 20, top: 20),
-                child: ListView.builder(
-                  itemCount: 3,
-                  itemBuilder: (content, index) {
-                    var avatarColor = Constants.darkCyanColor;
-                    if (index == 1) avatarColor = Color(0xFF37598C);
-                    if (index == 2) avatarColor = Color(0xFFf4a647);
-                    return Card(
-                      color: Constants.darkListTileBackgroundColor,
-                      child: ListTile(
-                        title: Text(
-                          'Susanna Hunter',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        subtitle: Text(
-                          'Phone: 0431 995 292',
-                          style: TextStyle(color: Constants.darkPinkColor),
-                        ),
-                        leading: CircleAvatar(
-                          backgroundColor: avatarColor,
-                          foregroundColor: Colors.white,
-                          child: Text('AH'),
-                        ),
+        Expanded(
+          child: Container(
+            padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Expanded(
+                  child: TabBarView(
+                    controller: tabController,
+                    children: [
+                      ListView.builder(
+                        itemCount: 3,
+                        itemBuilder: (content, index) {
+                          final avatarColor = index % 2 == 0
+                              ? const Color(0xFFf4a647)
+                              : const Color(0xFF37598C);
+                          return Card(
+                            color: Constants.darkListTileBackgroundColor,
+                            child: ListTile(
+                              title: Text(
+                                'Susanna Hunter',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              subtitle: Text(
+                                'Phone: 0431 995 292',
+                                style:
+                                    TextStyle(color: Constants.darkPinkColor),
+                              ),
+                              leading: CircleAvatar(
+                                backgroundColor: avatarColor,
+                                foregroundColor: Colors.white,
+                                child: const Text('AH'),
+                              ),
+                            ),
+                          );
+                        },
                       ),
-                    );
-                  },
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.only(left: 20, right: 20, top: 20),
-                child: ListView.builder(
-                  itemCount: 12,
-                  itemBuilder: (content, index) {
-                    var avatarColor = Constants.darkCyanColor;
-                    if (index == 1) avatarColor = Color(0xFF37598C);
-                    if (index == 2) avatarColor = Color(0xFFf4a647);
-                    if (index == 3) avatarColor = Constants.darkCyanColor;
-                    if (index == 4) avatarColor = Constants.darkPinkColor;
-                    if (index == 5) avatarColor = Color(0xFF37598C);
-                    if (index == 6) avatarColor = Color(0xFFf4a647);
-                    if (index == 7) avatarColor = Constants.darkCyanColor;
-                    if (index == 8) avatarColor = Constants.darkPinkColor;
-                    if (index == 9) avatarColor = Color(0xFF37598C);
-                    if (index == 10) avatarColor = Color(0xFFf4a647);
-                    if (index == 11) avatarColor = Constants.darkCyanColor;
-                    if (index == 12) avatarColor = Constants.darkPinkColor;
-                    return Card(
-                      color: Constants.darkListTileBackgroundColor,
-                      child: ListTile(
-                        title: Text(
-                          'Beatrix Hunter',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        subtitle: Text(
-                          'Age: 11    Female',
-                          style: TextStyle(color: Constants.darkPinkColor),
-                        ),
-                        leading: CircleAvatar(
-                          backgroundColor: avatarColor,
-                          foregroundColor: Colors.white,
-                          child: Text('AH'),
-                        ),
+                      ListView.builder(
+                        itemCount: 12,
+                        itemBuilder: (content, index) {
+                          var avatarColor = Constants.darkCyanColor;
+                          if (index % 4 == 1) {
+                            avatarColor = const Color(0xFF37598C);
+                          } else if (index % 4 == 2) {
+                            avatarColor = const Color(0xFFf4a647);
+                          } else if (index % 4 == 3) {
+                            avatarColor = Constants.darkPinkColor;
+                          }
+                          return Card(
+                            color: Constants.darkListTileBackgroundColor,
+                            child: ListTile(
+                              title: Text(
+                                'Beatrix Hunter',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              subtitle: Text(
+                                'Age: 11    Female',
+                                style:
+                                    TextStyle(color: Constants.darkPinkColor),
+                              ),
+                              leading: CircleAvatar(
+                                backgroundColor: avatarColor,
+                                foregroundColor: Colors.white,
+                                child: const Text('AH'),
+                              ),
+                            ),
+                          );
+                        },
                       ),
-                    );
-                  },
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ],
