@@ -30,6 +30,15 @@ class SwimmerAccount {
   final String dateOfBirth;
   final Gender gender;
 
+  String get fullName => '$firstName $lastName';
+  String get initials {
+    final firstInitial = firstName[0].toUpperCase();
+    final lastInitial = lastName[0].toUpperCase();
+    return '$firstInitial$lastInitial';
+  }
+
+  String get genderString => gender == Gender.female ? 'Female' : 'Male';
+
   @override
   String toString() {
     return "Swimmer('$firstName $lastName', DOB: $dateOfBirth, Gender:$gender)";

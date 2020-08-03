@@ -28,25 +28,30 @@ class _FluidNavBarDemoState extends State {
   Widget build(context) {
     // Build a simple container that switches content based of off the selected navigation item
     return MaterialApp(
-      home: SafeArea(
-        child: Scaffold(
-          backgroundColor: Constants.darkBackgroundColor, // Color(0xFF75B7E1),
-          extendBody: true,
-          body: _child,
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              Navigator.of(context).push<void>(_createRoute());
-            },
-            tooltip: 'RACE TIMER',
-            foregroundColor: Colors.white,
-            backgroundColor: Constants.darkCyanColor,
-            child: Icon(
-              Icons.timer,
-              size: 42,
-              color: Colors.white,
+      home: Material(
+        color: Constants.darkBackgroundColor,
+        child: SafeArea(
+          child: Scaffold(
+            backgroundColor:
+                Constants.darkBackgroundColor, // Color(0xFF75B7E1),
+            extendBody: false,
+            extendBodyBehindAppBar: false,
+            body: _child,
+            floatingActionButton: FloatingActionButton(
+              onPressed: () {
+                Navigator.of(context).push<void>(_createRoute());
+              },
+              tooltip: 'RACE TIMER',
+              foregroundColor: Colors.white,
+              backgroundColor: Constants.darkCyanColor,
+              child: Icon(
+                Icons.timer,
+                size: 42,
+                color: Colors.white,
+              ),
             ),
+            bottomNavigationBar: FluidNavBar(onChange: _handleNavigationChange),
           ),
-          bottomNavigationBar: FluidNavBar(onChange: _handleNavigationChange),
         ),
       ),
     );

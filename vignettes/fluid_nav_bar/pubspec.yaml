@@ -17,6 +17,7 @@ dependencies:
   uuid: ^2.1.0
   hooks_riverpod: ^0.5.1
   stop_watch_timer: ^0.4.0
+  intl: ^0.16.1
   shared:
     path: ../_shared
 

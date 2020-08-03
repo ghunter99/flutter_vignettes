@@ -2,6 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart' as Intl;
 
 import './demo.dart';
 import 'constants.dart';
@@ -22,7 +24,9 @@ final swimmerAccountListProvider = StateNotifierProvider((ref) {
   ]);
 });
 
-void main() {
+void main() async {
+  await initializeDateFormatting('en_AU', null);
+  Intl.Intl.defaultLocale = 'en_AU';
   runApp(const ProviderScope(child: App()));
 }
 
@@ -40,7 +44,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return ModelBinding(
       initialModel: GalleryOptions(
-        themeMode: ThemeMode.system,
+        themeMode: ThemeMode.dark,
         textScaleFactor: Constants.systemTextScaleFactorOption,
         customTextDirection: CustomTextDirection.localeBased,
         locale: null,
@@ -54,7 +58,7 @@ class App extends StatelessWidget {
             title: 'Flutter Gallery',
             debugShowCheckedModeBanner: false,
             themeMode: GalleryOptions.of(context).themeMode,
-            theme: GalleryThemeData.lightThemeData.copyWith(
+            theme: GalleryThemeData.darkThemeData.copyWith(
               platform: GalleryOptions.of(context).platform,
             ),
             darkTheme: GalleryThemeData.darkThemeData.copyWith(

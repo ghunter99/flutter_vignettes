@@ -3,7 +3,9 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../constants.dart';
 import '../main.dart';
+import 'view_swimmer_page.dart';
 
 class AccountContent extends HookWidget {
   Widget _buildAddSwimmerButton(BuildContext context) {
@@ -17,6 +19,7 @@ class AccountContent extends HookWidget {
           color: Colors.white,
           width: 1.5,
         )),
+        splashColor: Constants.selectedBackgroundColor,
       ),
       cupertino: (_, __) => CupertinoButtonData(
         color: Colors.transparent,
@@ -33,7 +36,7 @@ class AccountContent extends HookWidget {
           const SizedBox(
             width: 8,
           ),
-          PlatformText(
+          Text(
             'Swimmer',
             style: const TextStyle(
               color: Colors.white,
@@ -42,15 +45,7 @@ class AccountContent extends HookWidget {
         ],
       ),
     );
-    var wrapWithStadiumBorder = false;
-    switch (Theme.of(context).platform) {
-      case TargetPlatform.iOS:
-      case TargetPlatform.macOS:
-        wrapWithStadiumBorder = true;
-        break;
-      default:
-        break;
-    }
+    final wrapWithStadiumBorder = _isApple(context);
     if (wrapWithStadiumBorder) {
       button = Container(
         decoration: BoxDecoration(
@@ -66,6 +61,44 @@ class AccountContent extends HookWidget {
       );
     }
     return button;
+  }
+
+  bool _isApple(BuildContext context) {
+    var result = false;
+    switch (Theme.of(context).platform) {
+      case TargetPlatform.iOS:
+      case TargetPlatform.macOS:
+        result = true;
+        break;
+      default:
+        break;
+    }
+    return result;
+  }
+
+  Color avatarBackgroundColor(int index) {
+    var color = Constants.darkCyanColor;
+    if (index % 4 == 1) {
+      color = const Color(0xFF37598C);
+    } else if (index % 4 == 2) {
+      color = const Color(0xFFf4a647);
+    } else if (index % 4 == 3) {
+      color = Constants.darkPinkColor;
+    }
+    return color;
+  }
+
+  void _openPage(
+    BuildContext context,
+    WidgetBuilder pageToDisplayBuilder,
+  ) {
+    Navigator.push<void>(
+      context,
+      platformPageRoute(
+        context: context,
+        builder: pageToDisplayBuilder,
+      ),
+    );
   }
 
   @override
@@ -88,7 +121,7 @@ class AccountContent extends HookWidget {
         ),
         Expanded(
           child: Container(
-            padding: EdgeInsets.only(left: 20, right: 20, top: 20),
+            padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
@@ -97,10 +130,31 @@ class AccountContent extends HookWidget {
                     itemCount: swimmers.length,
                     itemBuilder: (content, index) {
                       return Card(
-                        color: Colors.red,
-                        child: ListTile(
-                          title: Text(swimmers[index].firstName),
-                          subtitle: Text(swimmers[index].dateOfBirth),
+                        color: Constants.darkListTileBackgroundColor,
+                        child: Theme(
+                          data: ThemeData(
+                            splashColor:
+                                _isApple(context) ? Colors.transparent : null,
+                          ),
+                          child: ListTile(
+                            leading: CircleAvatar(
+                              backgroundColor: avatarBackgroundColor(index),
+                              foregroundColor: Colors.white,
+                              child: Text(swimmers[index].initials),
+                            ),
+                            title: Text(
+                              swimmers[index].fullName,
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                            subtitle: Text(
+                              swimmers[index].dateOfBirth,
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                            onTap: () => _openPage(
+                              context,
+                              (_) => ViewSwimmerPage(index),
+                            ),
+                          ),
                         ),
                       );
                     },
