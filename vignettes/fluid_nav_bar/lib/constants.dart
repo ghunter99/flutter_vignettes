@@ -18,5 +18,5 @@ class Constants {
   static const Color darkUnselectedTabLabelColor =
       Color.fromRGBO(147, 73, 60, 1);
   static const Color selectedBackgroundColor =
-      const Color.fromRGBO(230, 230, 230, 1.0);
+      Color.fromRGBO(230, 230, 230, 1.0);
 }

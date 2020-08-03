@@ -125,7 +125,7 @@ class _StopwatchContentState extends State<StopwatchContent>
                 Navigator.pop(context);
               },
               color: Constants.darkBackgroundColor,
-              child: Text(
+              child: const Text(
                 'Close',
                 style: TextStyle(color: Colors.white, fontSize: 16),
               ),

@@ -88,9 +88,9 @@ class _FluidNavBarButtonState extends State<FluidNavBarButton>
           // This container just draws a circle with a certain radius and offset
           margin: EdgeInsets.all(ne.width / 2 - _radius),
           constraints: BoxConstraints.tight(const Size.square(_radius * 2)),
-          decoration: ShapeDecoration(
+          decoration: const ShapeDecoration(
             color: Constants.darkNavbarColor,
-            shape: const CircleBorder(),
+            shape: CircleBorder(),
           ),
           transform: Matrix4.translationValues(0, -offset, 0),
           // Create a fluid fill icon that get's filled in with a slight delay to the buttons animation

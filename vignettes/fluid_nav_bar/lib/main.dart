@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:intl/intl.dart' as Intl;
+import 'package:intl/intl.dart' as intl;
 
 import './demo.dart';
 import 'constants.dart';
@@ -24,9 +24,9 @@ final swimmerAccountListProvider = StateNotifierProvider((ref) {
   ]);
 });
 
-void main() async {
+Future<void> main() async {
   await initializeDateFormatting('en_AU', null);
-  Intl.Intl.defaultLocale = 'en_AU';
+  intl.Intl.defaultLocale = 'en_AU';
   runApp(const ProviderScope(child: App()));
 }
 

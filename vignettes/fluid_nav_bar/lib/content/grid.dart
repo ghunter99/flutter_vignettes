@@ -14,7 +14,7 @@ class GridContent extends StatelessWidget {
       child: GridView.count(
         crossAxisCount: columnCount,
         children: List.generate(20, (index) {
-          return PlaceholderImageWithText(
+          return const PlaceholderImageWithText(
               color: Constants.darkBackgroundColor,
               backgroundColor: Constants.darkBackgroundColor);
 //              color: Color(0xFF99D3F7), backgroundColor: Color(0xFFC7EAFF));

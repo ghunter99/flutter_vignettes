@@ -88,11 +88,11 @@ class HomeContent extends HookWidget {
                           return Card(
                             color: Constants.darkListTileBackgroundColor,
                             child: ListTile(
-                              title: Text(
+                              title: const Text(
                                 'Susanna Hunter',
                                 style: TextStyle(color: Colors.white),
                               ),
-                              subtitle: Text(
+                              subtitle: const Text(
                                 'Phone: 0431 995 292',
                                 style:
                                     TextStyle(color: Constants.darkPinkColor),
@@ -120,11 +120,11 @@ class HomeContent extends HookWidget {
                           return Card(
                             color: Constants.darkListTileBackgroundColor,
                             child: ListTile(
-                              title: Text(
+                              title: const Text(
                                 'Beatrix Hunter',
                                 style: TextStyle(color: Colors.white),
                               ),
-                              subtitle: Text(
+                              subtitle: const Text(
                                 'Age: 11    Female',
                                 style:
                                     TextStyle(color: Constants.darkPinkColor),

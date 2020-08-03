@@ -36,9 +36,9 @@ class AccountContent extends HookWidget {
           const SizedBox(
             width: 8,
           ),
-          Text(
+          const Text(
             'Swimmer',
-            style: const TextStyle(
+            style: TextStyle(
               color: Colors.white,
             ),
           ),
