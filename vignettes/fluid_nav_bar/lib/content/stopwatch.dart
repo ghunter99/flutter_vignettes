@@ -54,7 +54,7 @@ class _StopwatchContentState extends State<StopwatchContent>
     _fillTween = Tween<double>(begin: 0, end: 1).animate(
       CurvedAnimation(
           parent: _liquidSimController,
-          curve: Interval(.12, .45, curve: Curves.easeOut)),
+          curve: const Interval(.12, .45, curve: Curves.easeOut)),
 //          curve: Interval(.12, .45, curve: Curves.easeOut)),
     );
   }
@@ -172,8 +172,8 @@ class _StopwatchContentState extends State<StopwatchContent>
                           materialFlat: (_, __) => MaterialFlatButtonData(
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(50),
-                                side:
-                                    BorderSide(color: Constants.darkPinkColor)),
+                                side: const BorderSide(
+                                    color: Constants.darkPinkColor)),
                           ),
                           cupertino: (_, __) => CupertinoButtonData(
                             color: Constants.darkPinkColor,
@@ -184,13 +184,13 @@ class _StopwatchContentState extends State<StopwatchContent>
                             children: <Widget>[
                               PlatformText(
                                 'Event',
-                                style: TextStyle(
+                                style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              Icon(
+                              const Icon(
                                 Icons.edit,
                                 color: Colors.white,
                                 size: 20,
@@ -207,8 +207,8 @@ class _StopwatchContentState extends State<StopwatchContent>
                           materialFlat: (_, __) => MaterialFlatButtonData(
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(50),
-                                side:
-                                    BorderSide(color: Constants.darkPinkColor)),
+                                side: const BorderSide(
+                                    color: Constants.darkPinkColor)),
                           ),
                           cupertino: (_, __) => CupertinoButtonData(
                             color: Constants.darkPinkColor,
@@ -219,13 +219,13 @@ class _StopwatchContentState extends State<StopwatchContent>
                             children: <Widget>[
                               PlatformText(
                                 'Lane 1',
-                                style: TextStyle(
+                                style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              Icon(
+                              const Icon(
                                 Icons.edit,
                                 color: Colors.white,
                                 size: 20,
@@ -242,8 +242,8 @@ class _StopwatchContentState extends State<StopwatchContent>
                           materialFlat: (_, __) => MaterialFlatButtonData(
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(50),
-                                side:
-                                    BorderSide(color: Constants.darkPinkColor)),
+                                side: const BorderSide(
+                                    color: Constants.darkPinkColor)),
                           ),
                           cupertino: (_, __) => CupertinoButtonData(
                             color: Constants.darkPinkColor,
@@ -254,13 +254,13 @@ class _StopwatchContentState extends State<StopwatchContent>
                             children: <Widget>[
                               PlatformText(
                                 'Mab Midgely',
-                                style: TextStyle(
+                                style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              Icon(
+                              const Icon(
                                 Icons.edit,
                                 color: Colors.white,
                                 size: 20,
@@ -286,7 +286,7 @@ class _StopwatchContentState extends State<StopwatchContent>
                               padding: const EdgeInsets.all(8),
                               child: Text(
                                 displayTime,
-                                style: TextStyle(
+                                style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 56,
                                     fontFamily: 'Helvetica',
@@ -344,7 +344,7 @@ class _StopwatchContentState extends State<StopwatchContent>
                           children: <Widget>[
                             PlatformText(
                               'START',
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 36,
                                 fontWeight: FontWeight.bold,
@@ -383,7 +383,7 @@ class _StopwatchContentState extends State<StopwatchContent>
                           children: <Widget>[
                             PlatformText(
                               'STOP',
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 36,
                                 fontWeight: FontWeight.bold,
@@ -416,7 +416,7 @@ class _StopwatchContentState extends State<StopwatchContent>
                               color: Colors.lightBlue,
                               borderRadius: BorderRadius.circular(50),
                             ),
-                            child: Icon(
+                            child: const Icon(
                               Icons.refresh,
                               color: Colors.white,
                               size: 42,
@@ -445,7 +445,7 @@ class _StopwatchContentState extends State<StopwatchContent>
                             ),
                             child: PlatformText(
                               'FINISH',
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 36,
                                 fontWeight: FontWeight.bold,

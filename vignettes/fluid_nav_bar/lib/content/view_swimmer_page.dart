@@ -29,28 +29,26 @@ class ViewSwimmerPage extends HookWidget {
   }
 
   Widget _buildCloseButton(BuildContext context) {
+    if (isMaterial(context)) {
+      return IconButton(
+        onPressed: () => Navigator.pop(context),
+        icon: const Icon(
+          Icons.arrow_back,
+          color: Colors.white,
+        ),
+      );
+    }
     return PlatformButton(
-      onPressed: () {
-        Navigator.pop(context);
-      },
+      onPressed: () => Navigator.pop(context),
       color: Constants.darkBackgroundColor,
-      materialFlat: (_, __) => MaterialFlatButtonData(
-        padding: EdgeInsets.zero,
-        splashColor: Constants.selectedBackgroundColor,
-        shape: const CircleBorder(),
-      ),
       cupertino: (_, __) => CupertinoButtonData(
         padding: EdgeInsets.zero,
         color: Colors.transparent,
       ),
-      child: Icon(
-        _isApple(context) ? Icons.arrow_back_ios : Icons.arrow_back,
+      child: const Icon(
+        Icons.arrow_back_ios,
         color: Colors.white,
       ),
-//      Text(
-//        'Close',
-//        style: TextStyle(color: Colors.white, fontSize: 16),
-//      ),
     );
   }
 
@@ -75,16 +73,16 @@ class ViewSwimmerPage extends HookWidget {
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
+        children: const <Widget>[
           Icon(
             Icons.edit,
             color: Colors.white,
             size: 18,
           ),
-          const SizedBox(
+          SizedBox(
             width: 8,
           ),
-          const Text(
+          Text(
             'Edit',
             style: TextStyle(
               color: Colors.white,
@@ -187,7 +185,7 @@ class ViewSwimmerPage extends HookWidget {
                               radius: 48,
                               child: Text(
                                 swimmers[index].initials,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 42,
                                   fontWeight: FontWeight.bold,
                                 ),

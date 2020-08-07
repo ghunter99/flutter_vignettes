@@ -43,6 +43,14 @@ class GalleryThemeData {
         ),
         contentTextStyle: _textTheme.subtitle1.apply(color: _darkFillColor),
       ),
+      inputDecorationTheme: const InputDecorationTheme(
+        labelStyle: TextStyle(color: Colors.yellow),
+        hintStyle: TextStyle(color: Colors.yellow),
+        errorStyle: TextStyle(color: Colors.yellow),
+        fillColor: Colors.yellow,
+        focusColor: Colors.yellow,
+        hoverColor: Colors.yellow,
+      ),
     );
   }
 

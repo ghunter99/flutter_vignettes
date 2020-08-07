@@ -5,12 +5,12 @@ version: 1.0.0+1
 
 environment:
   sdk: ">=2.8.0 <3.0.0"
-  flutter: "> 1.17.0"
+  flutter: ">=1.20.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  flutter_platform_widgets: ^0.51.0
+  flutter_platform_widgets: ^0.60.1
   google_fonts: ^1.1.0
   cupertino_icons: ^0.1.3
   flutter_hooks: ^0.12.0
@@ -18,6 +18,7 @@ dependencies:
   hooks_riverpod: ^0.5.1
   stop_watch_timer: ^0.4.0
   intl: ^0.16.1
+  quiver: ^2.1.3
   shared:
     path: ../_shared
 

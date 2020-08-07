@@ -1,25 +1,45 @@
 import 'package:flutter/material.dart';
-import 'package:shared/ui/placeholder/placeholder_image_with_text.dart';
-
-import '../constants.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 
 class GridContent extends StatelessWidget {
+  Widget _buildSettingsButton(BuildContext context) {
+    if (isMaterial(context)) {
+      return IconButton(
+        onPressed: () {},
+        icon: const Icon(
+          Icons.settings,
+          color: Colors.white,
+        ),
+      );
+    }
+    return PlatformButton(
+      onPressed: () {},
+      child: const Icon(
+        Icons.settings,
+        color: Colors.white,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final bool isLandscape = MediaQuery.of(context).size.aspectRatio > 1;
-    final columnCount = isLandscape ? 3 : 2;
-
-    return Container(
-      padding: const EdgeInsets.only(left: 8, right: 8, top: 20),
-      child: GridView.count(
-        crossAxisCount: columnCount,
-        children: List.generate(20, (index) {
-          return const PlaceholderImageWithText(
-              color: Constants.darkBackgroundColor,
-              backgroundColor: Constants.darkBackgroundColor);
-//              color: Color(0xFF99D3F7), backgroundColor: Color(0xFFC7EAFF));
-        }),
-      ),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            const SizedBox(
+              width: 1,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(12),
+              child: _buildSettingsButton(context),
+            )
+          ],
+        ),
+      ],
     );
   }
 }

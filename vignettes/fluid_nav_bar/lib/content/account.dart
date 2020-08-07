@@ -27,16 +27,16 @@ class AccountContent extends HookWidget {
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
+        children: const <Widget>[
           Icon(
             Icons.add,
             color: Colors.white,
             size: 18,
           ),
-          const SizedBox(
+          SizedBox(
             width: 8,
           ),
-          const Text(
+          Text(
             'Swimmer',
             style: TextStyle(
               color: Colors.white,
@@ -45,7 +45,7 @@ class AccountContent extends HookWidget {
         ],
       ),
     );
-    final wrapWithStadiumBorder = _isApple(context);
+    final wrapWithStadiumBorder = isCupertino(context);
     if (wrapWithStadiumBorder) {
       button = Container(
         decoration: BoxDecoration(
@@ -61,19 +61,6 @@ class AccountContent extends HookWidget {
       );
     }
     return button;
-  }
-
-  bool _isApple(BuildContext context) {
-    var result = false;
-    switch (Theme.of(context).platform) {
-      case TargetPlatform.iOS:
-      case TargetPlatform.macOS:
-        result = true;
-        break;
-      default:
-        break;
-    }
-    return result;
   }
 
   Color avatarBackgroundColor(int index) {
@@ -133,8 +120,9 @@ class AccountContent extends HookWidget {
                         color: Constants.darkListTileBackgroundColor,
                         child: Theme(
                           data: ThemeData(
-                            splashColor:
-                                _isApple(context) ? Colors.transparent : null,
+                            splashColor: isCupertino(context)
+                                ? Colors.transparent
+                                : null,
                           ),
                           child: ListTile(
                             leading: CircleAvatar(

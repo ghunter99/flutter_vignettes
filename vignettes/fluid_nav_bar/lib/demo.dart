@@ -44,7 +44,7 @@ class _FluidNavBarDemoState extends State {
               tooltip: 'RACE TIMER',
               foregroundColor: Colors.white,
               backgroundColor: Constants.darkCyanColor,
-              child: Icon(
+              child: const Icon(
                 Icons.timer,
                 size: 42,
                 color: Colors.white,
