@@ -1,6 +1,8 @@
 import 'package:intl/intl.dart';
 
-class Format {
+import 'date_string.dart';
+
+class AppFormat {
   static String hours(double hours) {
     final hoursNotNegative = hours < 0.0 ? 0.0 : hours;
     final formatter = NumberFormat.decimalPattern();
@@ -22,5 +24,10 @@ class Format {
       return formatter.format(pay);
     }
     return '';
+  }
+
+  static String dMMMMyyyy(String yyyyMMdd) {
+    final dateString = DateString.yyyyMMdd(yyyyMMdd);
+    return DateFormat('d MMMM yyyy', 'en').format(dateString.dateTime);
   }
 }

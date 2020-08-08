@@ -4,7 +4,6 @@ import './content/account.dart';
 import './content/grid.dart';
 import './content/home.dart';
 import './fluid_nav_bar.dart';
-import 'constants.dart';
 import 'content/account.dart';
 import 'content/stopwatch.dart';
 
@@ -27,31 +26,28 @@ class _FluidNavBarDemoState extends State {
   @override
   Widget build(context) {
     // Build a simple container that switches content based of off the selected navigation item
-    return MaterialApp(
-      home: Material(
-        color: Constants.darkBackgroundColor,
-        child: SafeArea(
-          child: Scaffold(
-            backgroundColor:
-                Constants.darkBackgroundColor, // Color(0xFF75B7E1),
-            extendBody: false,
-            extendBodyBehindAppBar: false,
-            body: _child,
-            floatingActionButton: FloatingActionButton(
-              onPressed: () {
-                Navigator.of(context).push<void>(_createRoute());
-              },
-              tooltip: 'RACE TIMER',
-              foregroundColor: Colors.white,
-              backgroundColor: Constants.darkCyanColor,
-              child: const Icon(
-                Icons.timer,
-                size: 42,
-                color: Colors.white,
-              ),
+    return Material(
+      color: Theme.of(context).colorScheme.background,
+      child: SafeArea(
+        child: Scaffold(
+//          backgroundColor: Constants.darkBackgroundColor, // Color(0xFF75B7E1),
+          extendBody: false,
+          extendBodyBehindAppBar: false,
+          body: _child,
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              Navigator.of(context).push<void>(_createRoute());
+            },
+            tooltip: 'RACE TIMER',
+            foregroundColor: Colors.white,
+            backgroundColor: Theme.of(context).colorScheme.primaryVariant,
+            child: const Icon(
+              Icons.timer,
+              size: 42,
+              color: Colors.white,
             ),
-            bottomNavigationBar: FluidNavBar(onChange: _handleNavigationChange),
           ),
+          bottomNavigationBar: FluidNavBar(onChange: _handleNavigationChange),
         ),
       ),
     );

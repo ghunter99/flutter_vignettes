@@ -125,6 +125,25 @@ class DateString {
     return duration.inDays;
   }
 
+  /// Returns number of years, as an integer, between date and now
+  int get ageInYears {
+    final DateTime currentDate = DateTime.now();
+    final DateTime birthDate = _dateTime;
+    int age = currentDate.year - birthDate.year;
+    final int month1 = currentDate.month;
+    final int month2 = birthDate.month;
+    if (month2 > month1) {
+      age--;
+    } else if (month1 == month2) {
+      final int day1 = currentDate.day;
+      final int day2 = birthDate.day;
+      if (day2 > day1) {
+        age--;
+      }
+    }
+    return age < 0 ? 0 : age;
+  }
+
   /// Returns a [DateTime] for each day in the given range.
   /// [start] inclusive
   /// [end] exclusive

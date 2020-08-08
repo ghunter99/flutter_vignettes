@@ -1,12 +1,6 @@
 import 'package:flutter/material.dart';
 
 class Constants {
-  // Sentinel value for the system text scale factor option.
-  static const double systemTextScaleFactorOption = -1;
-
-  // height of the app header
-  static const double appHeaderHeight = 64;
-
   static const Color darkNavbarColor = Color.fromRGBO(48, 41, 59, 1);
 //  static const Color darkBackgroundColor = Color.fromRGBO(37, 30, 48, 1);
   static const Color darkBackgroundColor = Color.fromRGBO(69, 27, 111, 1);

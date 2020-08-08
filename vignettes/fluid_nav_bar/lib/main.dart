@@ -1,15 +1,16 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart' as intl;
 
 import './demo.dart';
-import 'constants.dart';
-import 'data/gallery_options.dart';
+import 'app_constants.dart';
+import 'data/app_options.dart';
 import 'model/swimmer_account.dart';
-import 'themes/gallery_theme_data.dart';
+import 'themes/app_theme_data.dart';
 
 /// Create a swimmer account list and initialize it with pre-defined values
 ///
@@ -27,6 +28,7 @@ final swimmerAccountListProvider = StateNotifierProvider((ref) {
 Future<void> main() async {
   await initializeDateFormatting('en_AU', null);
   intl.Intl.defaultLocale = 'en_AU';
+  GoogleFonts.config.allowRuntimeFetching = true;
   runApp(const ProviderScope(child: App()));
 }
 
@@ -43,9 +45,9 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ModelBinding(
-      initialModel: GalleryOptions(
+      initialModel: AppOptions(
         themeMode: ThemeMode.dark,
-        textScaleFactor: Constants.systemTextScaleFactorOption,
+        textScaleFactor: AppConstants.systemTextScaleFactorOption,
         customTextDirection: CustomTextDirection.localeBased,
         locale: null,
         timeDilation: timeDilation,
@@ -55,38 +57,19 @@ class App extends StatelessWidget {
       child: Builder(
         builder: (context) {
           return MaterialApp(
-            title: 'Flutter Gallery',
+            title: 'Swim Club',
             debugShowCheckedModeBanner: false,
-            themeMode: GalleryOptions.of(context).themeMode,
-            theme: GalleryThemeData.darkThemeData.copyWith(
-              platform: GalleryOptions.of(context).platform,
+            themeMode: AppOptions.of(context).themeMode,
+            theme: AppThemeData.lightThemeData.copyWith(
+              platform: AppOptions.of(context).platform,
             ),
-            darkTheme: GalleryThemeData.darkThemeData.copyWith(
-              platform: GalleryOptions.of(context).platform,
+            darkTheme: AppThemeData.darkThemeData.copyWith(
+              platform: AppOptions.of(context).platform,
             ),
-//            localizationsDelegates: const [
-//              ...GalleryLocalizations.localizationsDelegates,
-//              LocaleNamesLocalizationsDelegate()
-//            ],
-//            initialRoute: initialRoute,
             home: FluidNavBarDemo(),
-//            supportedLocales: GalleryLocalizations.supportedLocales,
-//            locale: GalleryOptions.of(context).locale,
-//            localeResolutionCallback: (locale, supportedLocales) {
-//              deviceLocale = locale;
-//              return locale;
-//            },
-//            onGenerateRoute: RouteConfiguration.onGenerateRoute,
           );
         },
       ),
     );
   }
-
-//  @override
-//  Widget build(BuildContext context) {
-//    return MaterialApp(
-//      home: FluidNavBarDemo(),
-//    );
-//  }
 }

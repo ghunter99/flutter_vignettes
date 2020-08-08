@@ -5,6 +5,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../constants.dart';
 import '../main.dart';
+import '../model/date_string.dart';
+import '../model/format.dart';
 import 'view_swimmer_page.dart';
 
 class AccountContent extends HookWidget {
@@ -14,12 +16,12 @@ class AccountContent extends HookWidget {
       color: Colors.transparent,
       onPressed: () {},
       materialFlat: (_, __) => MaterialFlatButtonData(
-        shape: const StadiumBorder(
+        shape: StadiumBorder(
             side: BorderSide(
-          color: Colors.white,
+          color: Theme.of(context).colorScheme.onPrimary,
           width: 1.5,
         )),
-        splashColor: Constants.selectedBackgroundColor,
+        //splashColor: Constants.selectedBackgroundColor,
       ),
       cupertino: (_, __) => CupertinoButtonData(
         color: Colors.transparent,
@@ -27,19 +29,17 @@ class AccountContent extends HookWidget {
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: const <Widget>[
+        children: <Widget>[
           Icon(
             Icons.add,
-            color: Colors.white,
+            color: Theme.of(context).colorScheme.onPrimary,
             size: 18,
           ),
-          SizedBox(
-            width: 8,
-          ),
+          const SizedBox(width: 8),
           Text(
             'Swimmer',
             style: TextStyle(
-              color: Colors.white,
+              color: Theme.of(context).colorScheme.onPrimary,
             ),
           ),
         ],
@@ -50,7 +50,7 @@ class AccountContent extends HookWidget {
       button = Container(
         decoration: BoxDecoration(
           border: Border.all(
-            color: Colors.white,
+            color: Theme.of(context).colorScheme.onPrimary,
             style: BorderStyle.solid,
             width: 1.5,
           ),
@@ -101,55 +101,73 @@ class AccountContent extends HookWidget {
               width: 1,
             ),
             Padding(
-              padding: const EdgeInsets.all(12),
+              padding: const EdgeInsets.all(16),
               child: _buildAddSwimmerButton(context),
             )
           ],
         ),
         Expanded(
-          child: Container(
-            padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: swimmers.length,
-                    itemBuilder: (content, index) {
-                      return Card(
-                        color: Constants.darkListTileBackgroundColor,
-                        child: Theme(
-                          data: ThemeData(
-                            splashColor: isCupertino(context)
-                                ? Colors.transparent
-                                : null,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Expanded(
+                child: ListView.builder(
+                  itemCount: swimmers.length,
+                  itemBuilder: (content, index) {
+                    return Card(
+                      margin: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
+                      //color: Constants.darkListTileBackgroundColor,
+                      child: Theme(
+                        data: ThemeData(
+                          splashColor:
+                              isCupertino(context) ? Colors.transparent : null,
+                        ),
+                        child: ListTile(
+                          contentPadding: const EdgeInsets.all(12),
+                          leading: CircleAvatar(
+                            backgroundColor: avatarBackgroundColor(index),
+                            foregroundColor: Colors.white,
+                            child: Text(swimmers[index].initials),
                           ),
-                          child: ListTile(
-                            leading: CircleAvatar(
-                              backgroundColor: avatarBackgroundColor(index),
-                              foregroundColor: Colors.white,
-                              child: Text(swimmers[index].initials),
-                            ),
-                            title: Text(
-                              swimmers[index].fullName,
-                              style: const TextStyle(color: Colors.white),
-                            ),
-                            subtitle: Text(
-                              swimmers[index].dateOfBirth,
-                              style: const TextStyle(color: Colors.white),
-                            ),
-                            onTap: () => _openPage(
-                              context,
-                              (_) => ViewSwimmerPage(index),
-                            ),
+                          title: Text(
+                            swimmers[index].fullName,
+                            style: Theme.of(context)
+                                .textTheme
+                                .subtitle1
+                                .copyWith(
+                                  color:
+                                      Theme.of(context).colorScheme.onPrimary,
+                                ),
+//                            style: TextStyle(
+//                                color: Theme.of(context).colorScheme.onPrimary),
+                          ),
+                          subtitle: Text(
+                            'Age:  ${DateString.yyyyMMdd(swimmers[index].dateOfBirth).ageInYears}\n'
+                            'Birthday:  ${AppFormat.dMMMMyyyy(swimmers[index].dateOfBirth)}\n'
+                            'Gender:  ${swimmers[index].genderString}',
+                            style: Theme.of(context)
+                                .textTheme
+                                .subtitle2
+                                .copyWith(
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+//                            style: TextStyle(
+//                                color: Theme.of(context).colorScheme.primary),
+                          ),
+                          onTap: () => _openPage(
+                            context,
+                            (_) => ViewSwimmerPage(index),
                           ),
                         ),
-                      );
-                    },
-                  ),
+                      ),
+                    );
+                  },
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ],

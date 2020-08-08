@@ -44,7 +44,7 @@ class DatePicker extends StatelessWidget {
         Expanded(
           child: InputDropdown(
             labelText: labelText,
-            valueText: Format.date(selectedDate),
+            valueText: AppFormat.date(selectedDate),
             valueStyle: valueStyle,
             onPressed: () => _selectDate(context),
           ),

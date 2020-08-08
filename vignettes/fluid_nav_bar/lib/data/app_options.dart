@@ -73,7 +73,7 @@ class AppOptions {
   Locale get locale =>
       _locale ??
       deviceLocale ??
-      // TODO: When deviceLocale can be obtained on desktop, this won't be necessary
+      // TODO: When deviceLocale obtained on desktop, this won't be necessary
       // https://github.com/flutter/flutter/issues/45152
       (!kIsWeb && (Platform.isMacOS || Platform.isWindows || Platform.isLinux)
           ? const Locale('en', 'US')
@@ -212,7 +212,7 @@ class _ModelBindingScope extends InheritedWidget {
     Key key,
     @required this.modelBindingState,
     Widget child,
-  })  : assert(modelBindingState != null, 'modeBindingState must not be null'),
+  })  : assert(modelBindingState != null, 'modelBindingState must not be null'),
         super(key: key, child: child);
 
   final _ModelBindingState modelBindingState;
@@ -226,7 +226,7 @@ class ModelBinding extends StatefulWidget {
     Key key,
     this.initialModel = const AppOptions(),
     this.child,
-  })  : assert(initialModel != null, 'InitialModel must not be null'),
+  })  : assert(initialModel != null, 'initialModel must not be null'),
         super(key: key);
 
   final AppOptions initialModel;
