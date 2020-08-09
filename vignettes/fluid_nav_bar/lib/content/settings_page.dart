@@ -61,11 +61,13 @@ class _SettingsPageState extends State<SettingsPage> {
 //        )
       ],
       cupertino: (_, __) => CupertinoNavigationBarData(
+        padding: const EdgeInsetsDirectional.only(start: 0, end: 0),
         backgroundColor: Colors.transparent,
         border: const Border(),
         transitionBetweenRoutes: false,
       ),
       material: (_, __) => MaterialAppBarData(
+        centerTitle: true,
         elevation: 0,
       ),
     );

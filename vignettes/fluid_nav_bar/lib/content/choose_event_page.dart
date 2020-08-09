@@ -68,11 +68,13 @@ class _ChooseEventPageState extends State<ChooseEventPage> {
 //        )
       ],
       cupertino: (_, __) => CupertinoNavigationBarData(
+        padding: const EdgeInsetsDirectional.only(start: 0, end: 0),
         backgroundColor: Colors.transparent,
         border: const Border(),
         transitionBetweenRoutes: false,
       ),
       material: (_, __) => MaterialAppBarData(
+        centerTitle: true,
         elevation: 0,
       ),
     );
@@ -111,7 +113,7 @@ class _ChooseEventPageState extends State<ChooseEventPage> {
           const EdgeInsets.only(left: 16, top: 6, right: 24, bottom: 8),
       label: Text(
         distance.padLeft(4),
-        style: TextStyle(color: Colors.white),
+        style: const TextStyle(color: Colors.white),
         //       style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
       ),
       selected: _chosenEvent == event,
@@ -119,7 +121,7 @@ class _ChooseEventPageState extends State<ChooseEventPage> {
         setState(() {
           _chosenEvent = event;
           WidgetsBinding.instance.addPostFrameCallback((_) async {
-            Future<Null>.delayed(Duration(milliseconds: 200), () {
+            Future<void>.delayed(const Duration(milliseconds: 200), () {
               Navigator.pop(context, _chosenEvent);
             });
           });

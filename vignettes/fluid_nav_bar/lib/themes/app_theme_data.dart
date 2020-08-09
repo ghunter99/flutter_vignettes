@@ -44,10 +44,6 @@ class AppThemeData {
         backgroundColor: colorScheme.background,
       ),
       iconTheme: IconThemeData(color: colorScheme.onPrimary),
-      canvasColor: colorScheme.background,
-      scaffoldBackgroundColor: colorScheme.background,
-      accentColor: colorScheme.primary,
-      focusColor: focusColor,
       snackBarTheme: SnackBarThemeData(
         behavior: SnackBarBehavior.floating,
         backgroundColor: Color.alphaBlend(
@@ -56,6 +52,12 @@ class AppThemeData {
         ),
         contentTextStyle: _textTheme.subtitle1.apply(color: _darkFillColor),
       ),
+      dividerTheme:
+          DividerThemeData(color: colorScheme.onSecondary, thickness: 1),
+      canvasColor: colorScheme.background,
+      scaffoldBackgroundColor: colorScheme.background,
+      accentColor: colorScheme.primary,
+      focusColor: focusColor,
       cardColor: colorScheme.secondary,
       bottomAppBarColor: colorScheme.surface,
       textSelectionColor: colorScheme.primary,
@@ -108,7 +110,7 @@ class AppThemeData {
     //
     headline1: GoogleFonts.dancingScript(fontWeight: _regular, fontSize: 48.0),
     headline2: GoogleFonts.dancingScript(fontWeight: _regular, fontSize: 32.0),
-    headline3: GoogleFonts.lato(fontWeight: _regular, fontSize: 24.0),
+    headline3: GoogleFonts.lato(fontWeight: _semiBold, fontSize: 22.0),
     headline4: GoogleFonts.lato(fontWeight: _regular, fontSize: 22.0),
     caption: GoogleFonts.lato(fontWeight: _semiBold, fontSize: 20.0),
     //
@@ -116,7 +118,7 @@ class AppThemeData {
     //
     headline5: GoogleFonts.lato(fontWeight: _medium, fontSize: 18.0),
     // used by appBar title, dialog title
-    headline6: GoogleFonts.lato(fontWeight: _bold, fontSize: 18.0),
+    headline6: GoogleFonts.balooTamma(fontWeight: _medium, fontSize: 24.0),
 //    headline6: GoogleFonts.dancingScript(fontWeight: _bold, fontSize: 28.0),
     // used by card title, dialog content, text form, chip label
     subtitle1: GoogleFonts.lato(fontWeight: _regular, fontSize: 18.0),

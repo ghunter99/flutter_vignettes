@@ -161,6 +161,7 @@ class _StopwatchContentState extends State<StopwatchContent>
             transitionBetweenRoutes: false,
           ),
           material: (_, __) => MaterialAppBarData(
+            centerTitle: true,
             elevation: 0,
           ),
         ),
