@@ -10,6 +10,32 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
+  Widget _buildCancelButton(BuildContext context) {
+    if (isMaterial(context)) {
+      return IconButton(
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        icon: const Icon(
+          Icons.close,
+        ),
+      );
+    }
+    return PlatformButton(
+      padding: EdgeInsets.zero,
+      onPressed: () {
+        Navigator.pop(context);
+      },
+      cupertino: (_, __) => CupertinoButtonData(
+        padding: EdgeInsets.zero,
+      ),
+      child: Icon(
+        Icons.close,
+        color: Theme.of(context).colorScheme.onPrimary,
+      ),
+    );
+  }
+
   PlatformAppBar _buildAppBar(BuildContext context) {
     return PlatformAppBar(
 //      backgroundColor: Theme.of(context).canvasColor,
@@ -21,18 +47,18 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
       ),
       trailingActions: <Widget>[
-        PlatformButton(
-          padding: EdgeInsets.zero,
-          color: Theme.of(context).colorScheme.background,
-          onPressed: () {
-            Navigator.pop(context);
-          },
-//          color: Theme.of(context).canvasColor,
-          child: Text(
-            'Close',
-            style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
-          ),
-        )
+        _buildCancelButton(context),
+//        PlatformButton(
+//          padding: EdgeInsets.zero,
+//          color: Theme.of(context).colorScheme.background,
+//          onPressed: () {
+//            Navigator.pop(context);
+//          },
+//          child: Text(
+//            'Close',
+//            style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
+//          ),
+//        )
       ],
       cupertino: (_, __) => CupertinoNavigationBarData(
         backgroundColor: Colors.transparent,

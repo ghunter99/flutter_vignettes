@@ -5,8 +5,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../constants.dart';
 import '../main.dart';
+import '../model/app_format.dart';
 import '../model/date_string.dart';
-import '../model/format.dart';
 import 'view_swimmer_page.dart';
 
 class AccountContent extends HookWidget {
@@ -21,7 +21,6 @@ class AccountContent extends HookWidget {
           color: Theme.of(context).colorScheme.onPrimary,
           width: 1.5,
         )),
-        //splashColor: Constants.selectedBackgroundColor,
       ),
       cupertino: (_, __) => CupertinoButtonData(
         color: Colors.transparent,

@@ -4,6 +4,36 @@
 
 // Only put constants shared between files here.
 
+class SwimEvent {
+  const SwimEvent._(this._name);
+  final String _name;
+  @override
+  String toString() {
+    return _name;
+  }
+
+  // freestyle events
+  static const SwimEvent freestyle25m = SwimEvent._('Freestyle 25m');
+  static const SwimEvent freestyle50m = SwimEvent._('Freestyle 50m');
+  static const SwimEvent freestyle100m = SwimEvent._('Freestyle 100m');
+  static const SwimEvent freestyle200m = SwimEvent._('Freestyle 200m');
+  // backstroke events
+  static const SwimEvent backstroke25m = SwimEvent._('Backstroke 25m');
+  static const SwimEvent backstroke50m = SwimEvent._('Backstroke 50m');
+  static const SwimEvent backstroke100m = SwimEvent._('Backstroke 100m');
+  // breaststroke events
+  static const SwimEvent breaststroke25m = SwimEvent._('Breaststroke 25m');
+  static const SwimEvent breaststroke50m = SwimEvent._('Breaststroke 50m');
+  static const SwimEvent breaststroke100m = SwimEvent._('Breaststroke 100m');
+  // butterfly events
+  static const SwimEvent butterfly25m = SwimEvent._('Butterfly 25m');
+  static const SwimEvent butterfly50m = SwimEvent._('Butterfly 50m');
+  static const SwimEvent butterfly100m = SwimEvent._('Butterfly 100m');
+  // medley events
+  static const SwimEvent medley100m = SwimEvent._('Medley 100m');
+  static const SwimEvent medley200m = SwimEvent._('Medley 200m');
+}
+
 class AppConstants {
   // height of the 'Gallery' header
   static const double galleryHeaderHeight = 64;

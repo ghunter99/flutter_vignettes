@@ -5,7 +5,8 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 
-import '../constants.dart';
+import '../app_constants.dart';
+import 'choose_event_page.dart';
 import 'liquid_painter.dart';
 
 enum _State {
@@ -43,6 +44,8 @@ class _StopwatchContentState extends State<StopwatchContent>
 
   double _screenHeight;
 
+  SwimEvent _swimEvent = SwimEvent.freestyle25m;
+
   @override
   void initState() {
     super.initState();
@@ -70,6 +73,26 @@ class _StopwatchContentState extends State<StopwatchContent>
     if (widget.isOpen) {
       setState(() {});
     }
+  }
+
+  Route<SwimEvent> _createChooseEventPageRoute() {
+    return PageRouteBuilder<SwimEvent>(
+      pageBuilder: (context, animation, secondaryAnimation) =>
+          ChooseEventPage(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(0.0, 1.0);
+        final end = Offset.zero;
+        final curve = Curves.ease;
+
+        final tween =
+            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+        return SlideTransition(
+          position: animation.drive(tween),
+          child: child,
+        );
+      },
+    );
   }
 
   Stack _buildLiquidBackground(double _maxFillLevel, double fillLevel) {
@@ -113,9 +136,9 @@ class _StopwatchContentState extends State<StopwatchContent>
     return Material(
       color: Colors.transparent,
       child: PlatformScaffold(
-        backgroundColor: Constants.darkBackgroundColor,
+        backgroundColor: Theme.of(context).colorScheme.background,
         appBar: PlatformAppBar(
-          backgroundColor: Constants.darkBackgroundColor,
+          backgroundColor: Theme.of(context).colorScheme.background,
           automaticallyImplyLeading: false,
           trailingActions: <Widget>[
             PlatformButton(
@@ -124,10 +147,12 @@ class _StopwatchContentState extends State<StopwatchContent>
                 _stopWatchTimer.onExecute.add(StopWatchExecute.reset);
                 Navigator.pop(context);
               },
-              color: Constants.darkBackgroundColor,
-              child: const Text(
+              color: Theme.of(context).colorScheme.background,
+              child: Text(
                 'Close',
-                style: TextStyle(color: Colors.white, fontSize: 16),
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onPrimary,
+                ),
               ),
             )
           ],
@@ -167,23 +192,28 @@ class _StopwatchContentState extends State<StopwatchContent>
                         PlatformButton(
                           padding: const EdgeInsets.symmetric(
                               vertical: 0, horizontal: 32),
-                          color: Constants.darkPinkColor,
-                          onPressed: () {},
+                          color: Theme.of(context).colorScheme.primary,
+                          onPressed: () async {
+                            final event = await Navigator.of(context)
+                                .push<SwimEvent>(_createChooseEventPageRoute());
+                            if (event != null && event != _swimEvent) {
+                              setState(() {
+                                _swimEvent = event;
+                              });
+                            }
+                          },
                           materialFlat: (_, __) => MaterialFlatButtonData(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(50),
-                                side: const BorderSide(
-                                    color: Constants.darkPinkColor)),
+                            shape: const StadiumBorder(),
                           ),
                           cupertino: (_, __) => CupertinoButtonData(
-                            color: Constants.darkPinkColor,
+                            color: Theme.of(context).colorScheme.primary,
                             borderRadius: BorderRadius.circular(50),
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               PlatformText(
-                                'Event',
+                                _swimEvent.toString(),
                                 style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 20,
@@ -202,16 +232,13 @@ class _StopwatchContentState extends State<StopwatchContent>
                         PlatformButton(
                           padding: const EdgeInsets.symmetric(
                               vertical: 0, horizontal: 32),
-                          color: Constants.darkPinkColor,
+                          color: Theme.of(context).colorScheme.primary,
                           onPressed: () {},
                           materialFlat: (_, __) => MaterialFlatButtonData(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(50),
-                                side: const BorderSide(
-                                    color: Constants.darkPinkColor)),
+                            shape: const StadiumBorder(),
                           ),
                           cupertino: (_, __) => CupertinoButtonData(
-                            color: Constants.darkPinkColor,
+                            color: Theme.of(context).colorScheme.primary,
                             borderRadius: BorderRadius.circular(50),
                           ),
                           child: Row(
@@ -237,16 +264,13 @@ class _StopwatchContentState extends State<StopwatchContent>
                         PlatformButton(
                           padding: const EdgeInsets.symmetric(
                               vertical: 0, horizontal: 32),
-                          color: Constants.darkPinkColor,
+                          color: Theme.of(context).colorScheme.primary,
                           onPressed: () {},
                           materialFlat: (_, __) => MaterialFlatButtonData(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(50),
-                                side: const BorderSide(
-                                    color: Constants.darkPinkColor)),
+                            shape: const StadiumBorder(),
                           ),
                           cupertino: (_, __) => CupertinoButtonData(
-                            color: Constants.darkPinkColor,
+                            color: Theme.of(context).colorScheme.primary,
                             borderRadius: BorderRadius.circular(50),
                           ),
                           child: Row(
@@ -286,8 +310,9 @@ class _StopwatchContentState extends State<StopwatchContent>
                               padding: const EdgeInsets.all(8),
                               child: Text(
                                 displayTime,
-                                style: const TextStyle(
-                                    color: Colors.white,
+                                style: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.onPrimary,
                                     fontSize: 56,
                                     fontFamily: 'Helvetica',
                                     fontWeight: FontWeight.bold),
@@ -331,9 +356,6 @@ class _StopwatchContentState extends State<StopwatchContent>
                         },
                         materialFlat: (_, __) => MaterialFlatButtonData(
                           shape: const StadiumBorder(),
-//                    RoundedRectangleBorder(
-//                        borderRadius: BorderRadius.circular(50),
-//                        side: BorderSide(color: Constants.darkCyanColor)),
                         ),
                         cupertino: (_, __) => CupertinoButtonData(
                           color: Colors.green,
@@ -370,9 +392,6 @@ class _StopwatchContentState extends State<StopwatchContent>
                         },
                         materialFlat: (_, __) => MaterialFlatButtonData(
                           shape: const StadiumBorder(),
-//                    RoundedRectangleBorder(
-//                        borderRadius: BorderRadius.circular(50),
-//                        side: BorderSide(color: Constants.darkCyanColor)),
                         ),
                         cupertino: (_, __) => CupertinoButtonData(
                           color: Colors.red,

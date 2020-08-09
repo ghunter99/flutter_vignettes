@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import 'date_string.dart';
@@ -29,5 +30,28 @@ class AppFormat {
   static String dMMMMyyyy(String yyyyMMdd) {
     final dateString = DateString.yyyyMMdd(yyyyMMdd);
     return DateFormat('d MMMM yyyy', 'en').format(dateString.dateTime);
+  }
+
+  static Widget fixedText(
+    String text, {
+    EdgeInsets padding = const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
+    double width,
+    double height,
+    TextStyle style,
+    TextAlign textAlign = TextAlign.start,
+  }) {
+    final richText = RichText(
+      textAlign: textAlign,
+      text: TextSpan(
+        text: text,
+        style: style,
+      ),
+    );
+    return Container(
+      padding: padding,
+      width: width,
+      height: height,
+      child: richText,
+    );
   }
 }

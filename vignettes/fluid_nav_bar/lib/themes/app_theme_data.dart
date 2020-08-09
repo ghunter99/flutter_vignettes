@@ -76,7 +76,7 @@ class AppThemeData {
     error: _lightFillColor,
     onError: _lightFillColor,
     onPrimary: _lightFillColor,
-    onSecondary: Color(0xFF322942),
+    onSecondary: Colors.grey, //Color(0xFF322942),
     onSurface: Color(0xFF241E30),
     brightness: Brightness.light,
   );
@@ -106,18 +106,19 @@ class AppThemeData {
     //
     // displayColor is applied to these text themes
     //
-    headline1: GoogleFonts.alegreya(fontWeight: _regular, fontSize: 48.0),
-    headline2: GoogleFonts.alegreya(fontWeight: _regular, fontSize: 32.0),
-    headline3: GoogleFonts.alegreya(fontWeight: _regular, fontSize: 24.0),
-    headline4: GoogleFonts.alegreya(fontWeight: _regular, fontSize: 22.0),
-    caption: GoogleFonts.alegreya(fontWeight: _semiBold, fontSize: 20.0),
+    headline1: GoogleFonts.dancingScript(fontWeight: _regular, fontSize: 48.0),
+    headline2: GoogleFonts.dancingScript(fontWeight: _regular, fontSize: 32.0),
+    headline3: GoogleFonts.lato(fontWeight: _regular, fontSize: 24.0),
+    headline4: GoogleFonts.lato(fontWeight: _regular, fontSize: 22.0),
+    caption: GoogleFonts.lato(fontWeight: _semiBold, fontSize: 20.0),
     //
     // bodyColor is applied to these text themes
     //
     headline5: GoogleFonts.lato(fontWeight: _medium, fontSize: 18.0),
     // used by appBar title, dialog title
-    headline6: GoogleFonts.dancingScript(fontWeight: _bold, fontSize: 24.0),
-    // user by card title, dialog content, text form
+    headline6: GoogleFonts.lato(fontWeight: _bold, fontSize: 18.0),
+//    headline6: GoogleFonts.dancingScript(fontWeight: _bold, fontSize: 28.0),
+    // used by card title, dialog content, text form, chip label
     subtitle1: GoogleFonts.lato(fontWeight: _regular, fontSize: 18.0),
     subtitle2: GoogleFonts.lato(fontWeight: _medium, fontSize: 16.0),
     bodyText1: GoogleFonts.lato(fontWeight: _regular, fontSize: 18.0),

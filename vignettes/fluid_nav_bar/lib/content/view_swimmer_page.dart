@@ -4,11 +4,9 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:intl/intl.dart';
 
-import '../constants.dart';
 import '../main.dart';
-import '../model/date_string.dart';
+import '../model/app_format.dart';
 import 'edit_swimmer_page.dart';
 
 class ViewSwimmerPage extends HookWidget {
@@ -28,26 +26,23 @@ class ViewSwimmerPage extends HookWidget {
     return result;
   }
 
-  Widget _buildCloseButton(BuildContext context) {
+  Widget _buildBackButton(BuildContext context) {
     if (isMaterial(context)) {
       return IconButton(
         onPressed: () => Navigator.pop(context),
-        icon: const Icon(
+        icon: Icon(
           Icons.arrow_back,
-          color: Colors.white,
+          color: Theme.of(context).colorScheme.onPrimary,
         ),
       );
     }
     return PlatformButton(
       onPressed: () => Navigator.pop(context),
-      color: Constants.darkBackgroundColor,
-      cupertino: (_, __) => CupertinoButtonData(
-        padding: EdgeInsets.zero,
-        color: Colors.transparent,
-      ),
-      child: const Icon(
+      padding: EdgeInsets.zero,
+      color: Colors.transparent,
+      child: Icon(
         Icons.arrow_back_ios,
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.onPrimary,
       ),
     );
   }
@@ -60,12 +55,11 @@ class ViewSwimmerPage extends HookWidget {
         _openPage(context, (_) => EditSwimmerPage(index));
       },
       materialFlat: (_, __) => MaterialFlatButtonData(
-        shape: const StadiumBorder(
+        shape: StadiumBorder(
             side: BorderSide(
-          color: Colors.white,
+          color: Theme.of(context).colorScheme.onPrimary,
           width: 1.5,
         )),
-        splashColor: Constants.selectedBackgroundColor,
       ),
       cupertino: (_, __) => CupertinoButtonData(
         color: Colors.transparent,
@@ -73,19 +67,19 @@ class ViewSwimmerPage extends HookWidget {
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: const <Widget>[
+        children: <Widget>[
           Icon(
             Icons.edit,
-            color: Colors.white,
+            color: Theme.of(context).colorScheme.onPrimary,
             size: 18,
           ),
-          SizedBox(
+          const SizedBox(
             width: 8,
           ),
           Text(
             'Edit',
             style: TextStyle(
-              color: Colors.white,
+              color: Theme.of(context).colorScheme.onPrimary,
             ),
           ),
         ],
@@ -96,7 +90,7 @@ class ViewSwimmerPage extends HookWidget {
       button = Container(
         decoration: BoxDecoration(
           border: Border.all(
-            color: Colors.white,
+            color: Theme.of(context).colorScheme.onPrimary,
             style: BorderStyle.solid,
             width: 1.5,
           ),
@@ -107,11 +101,6 @@ class ViewSwimmerPage extends HookWidget {
       );
     }
     return button;
-  }
-
-  String formattedDate(String yyyyMMdd) {
-    final dateString = DateString.yyyyMMdd(yyyyMMdd);
-    return DateFormat('d MMMM yyyy', 'en').format(dateString.dateTime);
   }
 
   void _openPage(
@@ -132,112 +121,131 @@ class ViewSwimmerPage extends HookWidget {
   Widget build(BuildContext context) {
     final swimmers = useProvider(swimmerAccountListProvider.state);
     return Material(
-      color: Constants.darkBackgroundColor,
+      color: Theme.of(context).colorScheme.background,
       child: SafeArea(
         child: PlatformScaffold(
           iosContentPadding: true,
           iosContentBottomPadding: true,
-          backgroundColor: Constants.darkBackgroundColor,
-//      appBar: PlatformAppBar(
-//        backgroundColor: Constants.darkBackgroundColor,
-//        automaticallyImplyLeading: true,
-//        trailingActions: <Widget>[
-//          Padding(
-//            padding: const EdgeInsets.only(top: 16, right: 16),
-//            child: _buildEditButton(context),
-//          ),
-//        ],
-//        cupertino: (_, __) => CupertinoNavigationBarData(
-//          border: const Border(),
-//          transitionBetweenRoutes: false,
-//          actionsForegroundColor: Colors.white,
-//        ),
-//        material: (_, __) => MaterialAppBarData(
-//          elevation: 0,
-//        ),
-//      ),
-          body: ListView(
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  _buildCloseButton(context),
-                  Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: _buildEditButton(context),
+          backgroundColor: Theme.of(context).colorScheme.background,
+          body: Stack(
+            children: [
+              Column(
+                children: [
+                  Expanded(
+                    child: ListView(
+                      children: [
+                        const SizedBox(height: 64),
+                        Row(
+                          children: <Widget>[
+                            const Expanded(flex: 1, child: SizedBox()),
+                            Expanded(
+                              flex: 6,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Padding(
+                                    padding: const EdgeInsets.only(bottom: 24),
+                                    child: Center(
+                                      child: CircleAvatar(
+                                        backgroundColor: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                        foregroundColor: Colors.white,
+                                        radius: 48,
+                                        child: Text(
+                                          swimmers[index].initials,
+                                          style: const TextStyle(
+                                            fontSize: 42,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Center(
+                                    child: Text(
+                                      swimmers[index].fullName,
+                                      style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onPrimary,
+                                        fontSize: 32,
+                                      ),
+                                    ),
+                                  ),
+                                  const Divider(
+                                      height: 36,
+                                      thickness: 1,
+                                      color: Colors.grey),
+                                  const Text(
+                                    'Birthday',
+                                    style: TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 22,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.symmetric(vertical: 8),
+                                    child: Text(
+                                      AppFormat.dMMMMyyyy(
+                                          swimmers[index].dateOfBirth),
+                                      style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                        fontSize: 22,
+                                      ),
+                                    ),
+                                  ),
+                                  const Divider(
+                                      height: 36,
+                                      thickness: 1,
+                                      color: Colors.grey),
+                                  const Text(
+                                    'Gender',
+                                    style: TextStyle(
+                                        color: Colors.grey, fontSize: 22),
+                                  ),
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.symmetric(vertical: 8),
+                                    child: Text(
+                                      swimmers[index].genderString,
+                                      style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                        fontSize: 22,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const Expanded(flex: 1, child: SizedBox()),
+                          ],
+                        )
+                      ],
+                    ),
                   )
                 ],
               ),
-              Row(
-                children: <Widget>[
-                  const Expanded(flex: 1, child: SizedBox()),
-                  Expanded(
-                    flex: 6,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 24),
-                          child: Center(
-                            child: CircleAvatar(
-                              backgroundColor: Constants.darkPinkColor,
-                              foregroundColor: Colors.white,
-                              radius: 48,
-                              child: Text(
-                                swimmers[index].initials,
-                                style: const TextStyle(
-                                  fontSize: 42,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Center(
-                          child: Text(
-                            swimmers[index].fullName,
-                            style: const TextStyle(
-                                color: Colors.white, fontSize: 32),
-                          ),
-                        ),
-                        const Divider(
-                            height: 36, thickness: 1, color: Colors.grey),
-                        const Text(
-                          'Birthday',
-                          style: TextStyle(color: Colors.grey, fontSize: 22),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8),
-                          child: Text(
-                            formattedDate(swimmers[index].dateOfBirth),
-                            style: const TextStyle(
-                              color: Constants.darkPinkColor,
-                              fontSize: 22,
-                            ),
-                          ),
-                        ),
-                        const Divider(
-                            height: 36, thickness: 1, color: Colors.grey),
-                        const Text(
-                          'Gender',
-                          style: TextStyle(color: Colors.grey, fontSize: 22),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8),
-                          child: Text(
-                            swimmers[index].genderString,
-                            style: const TextStyle(
-                              color: Constants.darkPinkColor,
-                              fontSize: 22,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const Expanded(flex: 1, child: SizedBox()),
-                ],
+//              Positioned.fill(
+//                child: Container(
+//                  color: Colors.red,
+//                ),
+//              ),
+              Positioned(
+                top: 8,
+                left: 0,
+                child: _buildBackButton(context),
               ),
+              Positioned(
+                top: 8,
+                right: 12,
+                child: _buildEditButton(context),
+              )
             ],
           ),
         ),
