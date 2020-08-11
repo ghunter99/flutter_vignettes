@@ -1,15 +1,17 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quiver/strings.dart' as qv;
 
-import '../common_widgets/date_picker.dart';
 import '../constants.dart';
+import '../content/gender_dialog.dart';
 import '../main.dart';
 import '../model/app_format.dart';
 import '../model/date_string.dart';
 import '../model/swimmer_account.dart';
+import 'edit_swimmer_name_page.dart';
 
 class EditSwimmerPage extends HookWidget {
   EditSwimmerPage(this.index);
@@ -17,6 +19,30 @@ class EditSwimmerPage extends HookWidget {
   final int index;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  Future<void> _openEditSwimmerNamePage(
+    BuildContext context,
+    SwimmerAccount account,
+  ) async {
+    final editedAccount = await Navigator.push<SwimmerAccount>(
+      context,
+      platformPageRoute(
+        context: context,
+        builder: (_) => EditSwimmerNamePage(account: account),
+      ),
+    );
+    if (editedAccount != null &&
+        (account.firstName.compareTo(editedAccount.firstName) != 0 ||
+            account.lastName.compareTo(editedAccount.lastName) != 0)) {
+      swimmerAccountListProvider.read(context).edit(
+            id: account.id,
+            firstName: editedAccount.firstName,
+            lastName: editedAccount.lastName,
+            dateOfBirth: account.dateOfBirth,
+            gender: account.gender,
+          );
+    }
+  }
 
   Widget _buildBackButton(BuildContext context) {
     if (isMaterial(context)) {
@@ -67,18 +93,6 @@ class EditSwimmerPage extends HookWidget {
     );
   }
 
-  Widget _buildBirthdayButton(SwimmerAccount swimmer) {
-    DateString birthday = DateString.yyyyMMdd('19900101');
-    if (swimmer.dateOfBirth != null) {
-      birthday = DateString.yyyyMMdd(swimmer.dateOfBirth);
-    }
-    return DatePicker(
-      labelText: 'Birthday',
-      selectedDate: birthday.dateTime,
-      onSelectedDate: (dateTime) {},
-    );
-  }
-
   Widget _buildAvatarButton(BuildContext context) {
     return PlatformButton(
       padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
@@ -98,76 +112,41 @@ class EditSwimmerPage extends HookWidget {
     );
   }
 
-  Widget _buildFirstNameButton(
+  Widget _buildNameButton(
     BuildContext context,
-    SwimmerAccount swimmer,
+    SwimmerAccount account,
   ) {
     return InkWell(
       splashColor: isCupertino(context) ? Colors.transparent : null,
-      onTap: () {},
-      child: Padding(
-        padding: const EdgeInsets.only(left: 16, top: 12, right: 8, bottom: 16),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'First Name',
-                  style: Theme.of(context).textTheme.subtitle1.copyWith(
-                        color: Theme.of(context).colorScheme.onPrimary,
-                      ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  swimmer.firstName,
-                  style: Theme.of(context).textTheme.caption.copyWith(
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                ),
-              ],
-            ),
-            const Icon(
-              Icons.keyboard_arrow_right,
-            ),
-          ],
-        ),
+      onTap: () => _openEditSwimmerNamePage(
+        context,
+        account,
       ),
-    );
-  }
-
-  Widget _buildLastNameButton(
-    BuildContext context,
-    SwimmerAccount swimmer,
-  ) {
-    return InkWell(
-      splashColor: isCupertino(context) ? Colors.transparent : null,
-      onTap: () {},
       child: Padding(
         padding: const EdgeInsets.only(left: 16, top: 12, right: 8, bottom: 16),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Last Name',
-                  style: Theme.of(context).textTheme.subtitle1.copyWith(
-                        color: Theme.of(context).colorScheme.onPrimary,
-                      ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  swimmer.lastName,
-                  style: Theme.of(context).textTheme.caption.copyWith(
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                ),
-              ],
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Name',
+                    style: Theme.of(context).textTheme.subtitle1.copyWith(
+                          color: Theme.of(context).colorScheme.onPrimary,
+                        ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    account.fullName,
+                    style: Theme.of(context).textTheme.caption.copyWith(
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                  ),
+                ],
+              ),
             ),
             const Icon(
               Icons.keyboard_arrow_right,
@@ -180,11 +159,32 @@ class EditSwimmerPage extends HookWidget {
 
   Widget _buildBirthdateButton(
     BuildContext context,
-    SwimmerAccount swimmer,
+    SwimmerAccount account,
   ) {
     return InkWell(
       splashColor: isCupertino(context) ? Colors.transparent : null,
-      onTap: () {},
+      onTap: () async {
+        DateString selectedDate = DateString.yyyyMMdd('19900101');
+        if (account.dateOfBirth != null) {
+          selectedDate = DateString.yyyyMMdd(account.dateOfBirth);
+        }
+        final pickedDate = await showDatePicker(
+          context: context,
+          initialDate: selectedDate.dateTime,
+          firstDate: DateTime(1900),
+          lastDate: DateTime(DateTime.now().year - 1),
+        );
+        if (pickedDate != null) {
+          AppFormat.dMMMMyyyy(DateString(pickedDate).yyyyMMdd);
+          swimmerAccountListProvider.read(context).edit(
+                id: account.id,
+                firstName: account.firstName,
+                lastName: account.lastName,
+                dateOfBirth: DateString(pickedDate).yyyyMMdd,
+                gender: account.gender,
+              );
+        }
+      },
       child: Padding(
         padding: const EdgeInsets.only(left: 16, top: 12, right: 8, bottom: 16),
         child: Row(
@@ -202,7 +202,7 @@ class EditSwimmerPage extends HookWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  AppFormat.dMMMMyyyy(swimmer.dateOfBirth),
+                  AppFormat.dMMMMyyyy(account.dateOfBirth),
                   style: Theme.of(context).textTheme.caption.copyWith(
                         color: Theme.of(context).colorScheme.primary,
                       ),
@@ -210,7 +210,7 @@ class EditSwimmerPage extends HookWidget {
               ],
             ),
             const Icon(
-              Icons.keyboard_arrow_right,
+              Icons.arrow_drop_down,
             ),
           ],
         ),
@@ -218,13 +218,106 @@ class EditSwimmerPage extends HookWidget {
     );
   }
 
+  Future<Gender> _showGenderDialog(
+    BuildContext context,
+    SwimmerAccount account,
+  ) async {
+    return showPlatformDialog(
+      context: context,
+      builder: (_) => GenderDialog(account: account),
+    );
+  }
+
+  Future<Gender> _showGenderModalPopup(
+    BuildContext context,
+    SwimmerAccount account,
+  ) async {
+    return showCupertinoModalPopup<Gender>(
+      context: context,
+      builder: (context) => CupertinoActionSheet(
+        title: const Text('Choose Gender'),
+        actions: [
+          CupertinoActionSheetAction(
+            onPressed: () {
+              Navigator.pop(context, Gender.female);
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Icon(
+                  Icons.check,
+                  color: Colors.transparent,
+                ),
+                const Text(
+                  'Female',
+                  textAlign: TextAlign.left,
+                ),
+                Icon(
+                  Icons.check,
+                  color: account.gender == Gender.female
+                      ? Theme.of(context).colorScheme.onPrimary
+                      : Colors.transparent,
+                )
+              ],
+            ),
+          ),
+          CupertinoActionSheetAction(
+            onPressed: () {
+              Navigator.pop(context, Gender.male);
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Icon(
+                  Icons.check,
+                  color: Colors.transparent,
+                ),
+                const Text(
+                  'Male',
+                  textAlign: TextAlign.left,
+                ),
+                Icon(
+                  Icons.check,
+                  color: account.gender == Gender.male
+                      ? Theme.of(context).colorScheme.onPrimary
+                      : Colors.transparent,
+                )
+              ],
+            ),
+          ),
+        ],
+        cancelButton: CupertinoActionSheetAction(
+          isDefaultAction: true,
+          onPressed: () {
+            Navigator.pop(context, false);
+          },
+          child: const Text(
+            'Cancel',
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildGenderButton(
     BuildContext context,
-    SwimmerAccount swimmer,
+    SwimmerAccount account,
   ) {
     return InkWell(
       splashColor: isCupertino(context) ? Colors.transparent : null,
-      onTap: () {},
+      onTap: () async {
+        final gender = await _showGenderDialog(context, account);
+//        final gender = await _showGenderModalPopup(context, account);
+        if (gender != null && gender != account.gender) {
+          swimmerAccountListProvider.read(context).edit(
+                id: account.id,
+                firstName: account.firstName,
+                lastName: account.lastName,
+                dateOfBirth: account.dateOfBirth,
+                gender: gender,
+              );
+        }
+      },
       child: Padding(
         padding: const EdgeInsets.only(left: 16, top: 12, right: 8, bottom: 16),
         child: Row(
@@ -242,7 +335,7 @@ class EditSwimmerPage extends HookWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  swimmer.genderString,
+                  account.genderString,
                   style: Theme.of(context).textTheme.caption.copyWith(
                         color: Theme.of(context).colorScheme.primary,
                       ),
@@ -289,9 +382,7 @@ class EditSwimmerPage extends HookWidget {
                       Card(
                         child: Column(
                           children: [
-                            _buildFirstNameButton(context, swimmers[index]),
-                            const Divider(height: 1, indent: 16, endIndent: 16),
-                            _buildLastNameButton(context, swimmers[index]),
+                            _buildNameButton(context, swimmers[index]),
                             const Divider(height: 1, indent: 16, endIndent: 16),
                             _buildBirthdateButton(context, swimmers[index]),
                             const Divider(height: 1, indent: 16, endIndent: 16),
@@ -439,7 +530,6 @@ class EditSwimmerPage extends HookWidget {
                           ),
                         ),
                       ),
-                      _buildBirthdayButton(swimmers[index]),
                       const Divider(
                           height: 36, thickness: 1, color: Colors.grey),
                       const Text(

@@ -76,7 +76,7 @@ class AppThemeData {
     surface: Color(0xFFFAFBFB),
     onBackground: Colors.white,
     error: _lightFillColor,
-    onError: _lightFillColor,
+    onError: Colors.red,
     onPrimary: _lightFillColor,
     onSecondary: Colors.grey, //Color(0xFF322942),
     onSurface: Color(0xFF241E30),
@@ -92,7 +92,7 @@ class AppThemeData {
     surface: Color(0xFF1F1929),
     onBackground: Color(0x0DFFFFFF), // White with 0.05 opacity
     error: _darkFillColor,
-    onError: _darkFillColor,
+    onError: Colors.yellow,
     onPrimary: _darkFillColor,
     onSecondary: Colors.grey,
     onSurface: _darkFillColor,
@@ -102,7 +102,7 @@ class AppThemeData {
   static const _regular = FontWeight.w400;
   static const _medium = FontWeight.w500;
   static const _semiBold = FontWeight.w600;
-  static const _bold = FontWeight.w700;
+  //static const _bold = FontWeight.w700;
 
   static final TextTheme _textTheme = TextTheme(
     //
@@ -126,7 +126,7 @@ class AppThemeData {
     bodyText1: GoogleFonts.lato(fontWeight: _regular, fontSize: 18.0),
     // used by card subtitle
     bodyText2: GoogleFonts.lato(fontWeight: _medium, fontSize: 16.0),
-    overline: GoogleFonts.lato(fontWeight: _semiBold, fontSize: 13.0),
+    overline: GoogleFonts.lato(fontWeight: _semiBold, fontSize: 14.0),
     // used by button
     button: GoogleFonts.lato(fontWeight: _semiBold, fontSize: 18.0),
   );
