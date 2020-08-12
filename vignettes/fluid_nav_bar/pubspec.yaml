@@ -28,7 +28,26 @@ dev_dependencies:
 
 
 flutter:
+  uses-material-design: true
+  fonts:
+    - family: Lato
+      fonts:
+        - asset: assets/fonts/Lato-Thin.ttf
+          weight: 200
+        - asset: assets/fonts/Lato-Light.ttf
+          weight: 300
+        - asset: assets/fonts/Lato-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Lato-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Lato-Black.ttf
+          weight: 800
+
   assets:
     - fonts/google_fonts/
-  uses-material-design: true
+    - assets/images/
+    - assets/images/birds/
+    - assets/images/flokk-logo.svg
+    - assets/images/avatars/
+    - assets/icons/
 

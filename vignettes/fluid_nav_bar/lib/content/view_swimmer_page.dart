@@ -7,6 +7,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../main.dart';
 import '../model/app_format.dart';
+import '../model/swimmer_account.dart';
+import '../styled_components/styled_swimmer_avatar.dart';
 import 'edit_swimmer_page.dart';
 
 class ViewSwimmerPage extends HookWidget {
@@ -103,6 +105,25 @@ class ViewSwimmerPage extends HookWidget {
     return button;
   }
 
+  Widget _buildAvatar(
+    BuildContext context,
+    SwimmerAccount account,
+  ) {
+    return StyledSwimmerAvatar(account: account, size: 100);
+//    return CircleAvatar(
+//      backgroundColor: Theme.of(context).colorScheme.primary,
+//      foregroundColor: Colors.white,
+//      radius: 48,
+//      child: Text(
+//        swimmers[index].initials,
+//        style: const TextStyle(
+//          fontSize: 42,
+//          fontWeight: FontWeight.bold,
+//        ),
+//      ),
+//    );
+  }
+
   void _openPage(
     BuildContext context,
     WidgetBuilder pageToDisplayBuilder,
@@ -146,19 +167,9 @@ class ViewSwimmerPage extends HookWidget {
                                   Padding(
                                     padding: const EdgeInsets.only(bottom: 24),
                                     child: Center(
-                                      child: CircleAvatar(
-                                        backgroundColor: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                        foregroundColor: Colors.white,
-                                        radius: 48,
-                                        child: Text(
-                                          swimmers[index].initials,
-                                          style: const TextStyle(
-                                            fontSize: 42,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
+                                      child: _buildAvatar(
+                                        context,
+                                        swimmers[index],
                                       ),
                                     ),
                                   ),

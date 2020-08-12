@@ -38,35 +38,42 @@ class _EditSwimmerNamePageState extends State<EditSwimmerNamePage> {
   }
 
   String _firstNameValidator(String name) {
-    final String str = name.trim();
-    if (str.isEmpty) {
+    // check length
+    final trimmedName = name.trim();
+    if (trimmedName.isEmpty) {
       return 'Please enter first name\n';
     }
-    if (str.length > 35) {
+    if (trimmedName.length > 35) {
       return 'Name can have at most 35 characters\n';
     }
-    final str2 = str.replaceAll(RegExp(r"(_|[^\w\s\\'])+"), '');
-    if (str == str2) {
-      // doesn't contain special characters or emoji. Apostrophes are okay
+    // check doesn't contain special characters or emoji
+    // except for single quote, apostrophe or period characters
+    final str1 =
+        trimmedName.replaceAll("'", '').replaceAll('’', '').replaceAll('.', '');
+    final str2 = trimmedName.replaceAll(RegExp(r"(_|[^\w\s])+"), '');
+    if (str1 == str2) {
       return null;
     }
-    return 'Name may not contain special characters or emoji';
+    return 'Name can not contain special characters or emoji';
   }
 
   String _lastNameValidator(String name) {
-    final str = name.trim();
-    if (str.isEmpty) {
+    final trimmedName = name.trim();
+    if (trimmedName.isEmpty) {
       return 'Please enter last name\n';
     }
-    if (str.length > 35) {
+    if (trimmedName.length > 35) {
       return 'Name can have at most 35 characters\n';
     }
-    final str2 = str.replaceAll(RegExp(r"(_|[^\w\s\\'])+"), '');
-    if (str == str2) {
-      // doesn't contain special characters or emoji. Apostrophes are okay
+    // check doesn't contain special characters or emoji
+    // except for single quote, apostrophe or period characters
+    final str1 =
+        trimmedName.replaceAll("'", '').replaceAll('’', '').replaceAll('.', '');
+    final str2 = trimmedName.replaceAll(RegExp(r"(_|[^\w\s])+"), '');
+    if (str1 == str2) {
       return null;
     }
-    return 'Name may not contain special characters or emoji';
+    return 'Name can not contain special characters or emoji';
   }
 
   Widget _buildBackButton(BuildContext context) {
@@ -213,7 +220,7 @@ class _EditSwimmerNamePageState extends State<EditSwimmerNamePage> {
   Widget _buildSaveButton(BuildContext context) {
     return PlatformButton(
       padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 32),
-      color: Theme.of(context).colorScheme.primary,
+      color: Theme.of(context).colorScheme.primaryVariant,
       onPressed: _onFormSubmit,
       materialFlat: (_, __) => MaterialFlatButtonData(
         shape: const StadiumBorder(),

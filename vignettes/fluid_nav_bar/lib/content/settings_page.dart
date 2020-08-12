@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 
 import '../data/app_options.dart';
+import 'theme_dialog.dart';
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -38,7 +39,6 @@ class _SettingsPageState extends State<SettingsPage> {
 
   PlatformAppBar _buildAppBar(BuildContext context) {
     return PlatformAppBar(
-//      backgroundColor: Theme.of(context).canvasColor,
       automaticallyImplyLeading: false,
       title: Text(
         'Settings',
@@ -48,17 +48,6 @@ class _SettingsPageState extends State<SettingsPage> {
       ),
       trailingActions: <Widget>[
         _buildCancelButton(context),
-//        PlatformButton(
-//          padding: EdgeInsets.zero,
-//          color: Theme.of(context).colorScheme.background,
-//          onPressed: () {
-//            Navigator.pop(context);
-//          },
-//          child: Text(
-//            'Close',
-//            style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
-//          ),
-//        )
       ],
       cupertino: (_, __) => CupertinoNavigationBarData(
         padding: const EdgeInsetsDirectional.only(start: 0, end: 0),
@@ -70,6 +59,16 @@ class _SettingsPageState extends State<SettingsPage> {
         centerTitle: true,
         elevation: 0,
       ),
+    );
+  }
+
+  Future<ThemeMode> _showThemeDialog(
+    BuildContext context,
+    ThemeMode themeMode,
+  ) async {
+    return showPlatformDialog(
+      context: context,
+      builder: (_) => ThemeDialog(themeMode: themeMode),
     );
   }
 
@@ -170,6 +169,22 @@ class _SettingsPageState extends State<SettingsPage> {
             ));
   }
 
+  String _themeModeToString(ThemeMode mode) {
+    String result;
+    switch (mode) {
+      case ThemeMode.light:
+        result = 'Light';
+        break;
+      case ThemeMode.dark:
+        result = 'Dark';
+        break;
+      case ThemeMode.system:
+        result = 'System default';
+        break;
+    }
+    return result;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -203,7 +218,20 @@ class _SettingsPageState extends State<SettingsPage> {
                               splashColor: isCupertino(context)
                                   ? Colors.transparent
                                   : null,
-                              onTap: _showThemeModalPopup,
+//                              onTap: _showThemeModalPopup,
+                              onTap: () async {
+                                final themeMode = await _showThemeDialog(
+                                    context, AppOptions.of(context).themeMode);
+                                if (themeMode != null &&
+                                    themeMode !=
+                                        AppOptions.of(context).themeMode) {
+                                  AppOptions.update(
+                                    context,
+                                    AppOptions.of(context)
+                                        .copyWith(themeMode: themeMode),
+                                  );
+                                }
+                              },
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Row(
@@ -227,7 +255,8 @@ class _SettingsPageState extends State<SettingsPage> {
                                               ),
                                         ),
                                         Text(
-                                          'System default',
+                                          _themeModeToString(
+                                              AppOptions.of(context).themeMode),
                                           style: Theme.of(context)
                                               .textTheme
                                               .subtitle2

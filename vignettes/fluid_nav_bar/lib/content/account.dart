@@ -7,6 +7,8 @@ import '../constants.dart';
 import '../main.dart';
 import '../model/app_format.dart';
 import '../model/date_string.dart';
+import '../model/swimmer_account.dart';
+import '../styled_components/styled_swimmer_avatar.dart';
 import 'view_swimmer_page.dart';
 
 class AccountContent extends HookWidget {
@@ -74,6 +76,15 @@ class AccountContent extends HookWidget {
     return color;
   }
 
+  Widget _buildAvatar(BuildContext context, SwimmerAccount account) {
+    return StyledSwimmerAvatar(account: account, size: 60);
+//    return CircleAvatar(
+//      backgroundColor: avatarBackgroundColor(index),
+//      foregroundColor: Colors.white,
+//      child: Text(swimmer.initials),
+//    );
+  }
+
   void _openPage(
     BuildContext context,
     WidgetBuilder pageToDisplayBuilder,
@@ -126,10 +137,9 @@ class AccountContent extends HookWidget {
                         ),
                         child: ListTile(
                           contentPadding: const EdgeInsets.all(12),
-                          leading: CircleAvatar(
-                            backgroundColor: avatarBackgroundColor(index),
-                            foregroundColor: Colors.white,
-                            child: Text(swimmers[index].initials),
+                          leading: _buildAvatar(
+                            context,
+                            swimmers[index],
                           ),
                           title: Text(
                             swimmers[index].fullName,

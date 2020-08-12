@@ -21,6 +21,18 @@ final swimmerAccountListProvider = StateNotifierProvider((ref) {
       lastName: "O'Neill",
       dateOfBirth: '19730802',
       gender: Gender.female,
+    ),
+    SwimmerAccount(
+      firstName: 'Ian',
+      lastName: 'Thorpe',
+      dateOfBirth: '19821013',
+      gender: Gender.male,
+    ),
+    SwimmerAccount(
+      firstName: 'Cate',
+      lastName: 'Campbell',
+      dateOfBirth: '19920520',
+      gender: Gender.female,
     )
   ]);
 });

@@ -1,3 +1,4 @@
+import 'package:fluid_nav_bar/styled_components/styled_swimmer_avatar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -93,10 +94,14 @@ class EditSwimmerPage extends HookWidget {
     );
   }
 
-  Widget _buildAvatarButton(BuildContext context) {
+  Widget _buildAvatarButton(
+    BuildContext context,
+    SwimmerAccount account,
+  ) {
     return PlatformButton(
-      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-      color: Theme.of(context).colorScheme.primary,
+      padding: EdgeInsets.all(4),
+      //padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+      color: Colors.transparent, //Theme.of(context).colorScheme.primary,
       onPressed: () {},
       materialFlat: (_, __) => MaterialFlatButtonData(
         shape: const CircleBorder(),
@@ -104,10 +109,16 @@ class EditSwimmerPage extends HookWidget {
       cupertino: (_, __) => CupertinoButtonData(
         borderRadius: BorderRadius.circular(100),
       ),
-      child: const Icon(
-        Icons.camera_alt,
-        color: Colors.white,
-        size: 32,
+      child: Stack(
+        alignment: Alignment.bottomLeft,
+        children: [
+          StyledSwimmerAvatar(account: account, size: 100),
+          const Icon(
+            Icons.camera_alt,
+            color: Colors.white,
+            size: 40,
+          ),
+        ],
       ),
     );
   }
@@ -374,9 +385,9 @@ class EditSwimmerPage extends HookWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(left: 16),
-                        child: _buildAvatarButton(context),
+                      _buildAvatarButton(
+                        context,
+                        swimmers[index],
                       ),
                       const SizedBox(height: 16),
                       Card(
