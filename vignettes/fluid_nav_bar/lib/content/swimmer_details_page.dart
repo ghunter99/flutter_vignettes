@@ -11,8 +11,8 @@ import '../model/swimmer_account.dart';
 import '../styled_components/styled_swimmer_avatar.dart';
 import 'edit_swimmer_page.dart';
 
-class ViewSwimmerPage extends HookWidget {
-  const ViewSwimmerPage(this.index);
+class SwimmerDetailsPage extends HookWidget {
+  const SwimmerDetailsPage(this.index);
   final int index;
 
   bool _isApple(BuildContext context) {

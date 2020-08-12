@@ -4,19 +4,20 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../constants.dart';
+import '../content/new_swimmer_name_page.dart';
 import '../main.dart';
 import '../model/app_format.dart';
 import '../model/date_string.dart';
 import '../model/swimmer_account.dart';
 import '../styled_components/styled_swimmer_avatar.dart';
-import 'view_swimmer_page.dart';
+import 'swimmer_details_page.dart';
 
 class AccountContent extends HookWidget {
-  Widget _buildAddSwimmerButton(BuildContext context) {
+  Widget _buildAddButton(BuildContext context) {
     Widget button = PlatformButton(
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
       color: Colors.transparent,
-      onPressed: () {},
+      onPressed: () => _openNewSwimmerNamePage(context),
       materialFlat: (_, __) => MaterialFlatButtonData(
         shape: StadiumBorder(
             side: BorderSide(
@@ -85,7 +86,31 @@ class AccountContent extends HookWidget {
 //    );
   }
 
-  void _openPage(
+  Future<void> _openNewSwimmerNamePage(BuildContext context) async {
+    final SwimmerAccount account = SwimmerAccount(
+      firstName: '',
+      lastName: '',
+      dateOfBirth: DateString(DateTime(DateTime.now().year - 6)).yyyyMMdd,
+      gender: Gender.female,
+    );
+    final newAccount = await Navigator.push<SwimmerAccount>(
+      context,
+      platformPageRoute(
+        context: context,
+        builder: (_) => NewSwimmerNamePage(account: account),
+      ),
+    );
+    if (newAccount != null) {
+      swimmerAccountListProvider.read(context).add(
+            firstName: newAccount.firstName,
+            lastName: newAccount.lastName,
+            dateOfBirth: newAccount.dateOfBirth,
+            gender: newAccount.gender,
+          );
+    }
+  }
+
+  void _openSwimmerDetailsPage(
     BuildContext context,
     WidgetBuilder pageToDisplayBuilder,
   ) {
@@ -112,7 +137,7 @@ class AccountContent extends HookWidget {
             ),
             Padding(
               padding: const EdgeInsets.all(16),
-              child: _buildAddSwimmerButton(context),
+              child: _buildAddButton(context),
             )
           ],
         ),
@@ -166,9 +191,9 @@ class AccountContent extends HookWidget {
 //                            style: TextStyle(
 //                                color: Theme.of(context).colorScheme.primary),
                           ),
-                          onTap: () => _openPage(
+                          onTap: () => _openSwimmerDetailsPage(
                             context,
-                            (_) => ViewSwimmerPage(index),
+                            (_) => SwimmerDetailsPage(index),
                           ),
                         ),
                       ),

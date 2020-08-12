@@ -50,7 +50,7 @@ class _EditSwimmerNamePageState extends State<EditSwimmerNamePage> {
     // except for single quote, apostrophe or period characters
     final str1 =
         trimmedName.replaceAll("'", '').replaceAll('’', '').replaceAll('.', '');
-    final str2 = trimmedName.replaceAll(RegExp(r"(_|[^\w\s])+"), '');
+    final str2 = trimmedName.replaceAll(RegExp(r'(_|[^\w\s])+'), '');
     if (str1 == str2) {
       return null;
     }
@@ -69,7 +69,7 @@ class _EditSwimmerNamePageState extends State<EditSwimmerNamePage> {
     // except for single quote, apostrophe or period characters
     final str1 =
         trimmedName.replaceAll("'", '').replaceAll('’', '').replaceAll('.', '');
-    final str2 = trimmedName.replaceAll(RegExp(r"(_|[^\w\s])+"), '');
+    final str2 = trimmedName.replaceAll(RegExp(r'(_|[^\w\s])+'), '');
     if (str1 == str2) {
       return null;
     }
