@@ -136,7 +136,7 @@ class AccountContent extends HookWidget {
               width: 1,
             ),
             Padding(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(8),
               child: _buildAddButton(context),
             )
           ],

@@ -350,7 +350,7 @@ class EditSwimmerPage extends HookWidget {
               ],
             ),
             const Icon(
-              Icons.keyboard_arrow_right,
+              Icons.arrow_drop_down,
             ),
           ],
         ),

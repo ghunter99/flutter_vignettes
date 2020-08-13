@@ -30,19 +30,21 @@ class _NewSwimmerBirthdatePageState extends State<NewSwimmerBirthdatePage> {
     _gender = widget.account.gender;
   }
 
+  void _onPressedBackButton() {
+    final SwimmerAccount account = SwimmerAccount(
+      firstName: widget.account.firstName,
+      lastName: widget.account.lastName,
+      dateOfBirth: _birthdate,
+      gender: _gender,
+    );
+    Navigator.pop(context, account);
+  }
+
   Widget _buildBackButton(BuildContext context) {
     if (isMaterial(context)) {
       return IconButton(
         padding: EdgeInsets.zero,
-        onPressed: () {
-          final SwimmerAccount account = SwimmerAccount(
-            firstName: widget.account.firstName,
-            lastName: widget.account.lastName,
-            dateOfBirth: _birthdate,
-            gender: _gender,
-          );
-          Navigator.pop(context, account);
-        },
+        onPressed: _onPressedBackButton,
         icon: Icon(
           Icons.arrow_back,
           color: Theme.of(context).colorScheme.onPrimary,
@@ -50,7 +52,7 @@ class _NewSwimmerBirthdatePageState extends State<NewSwimmerBirthdatePage> {
       );
     }
     return PlatformButton(
-      onPressed: () => Navigator.pop(context),
+      onPressed: _onPressedBackButton,
       padding: EdgeInsets.zero,
       color: Colors.transparent,
       cupertino: (_, __) => CupertinoButtonData(
@@ -96,7 +98,7 @@ class _NewSwimmerBirthdatePageState extends State<NewSwimmerBirthdatePage> {
 
   Widget _buildNextButton(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(right: 8, top: 4, bottom: 4),
+      padding: const EdgeInsets.only(right: 8, top: 8, bottom: 0),
       child: PlatformButton(
         padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
         color: Theme.of(context).colorScheme.primaryVariant,
@@ -204,12 +206,9 @@ class _NewSwimmerBirthdatePageState extends State<NewSwimmerBirthdatePage> {
     // wrap in a form
     final form = Form(
       key: _formKey,
-      child: SingleChildScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
+      child: ListView(
           padding: const EdgeInsets.symmetric(horizontal: 32.0),
-          child: Column(
-            children: list,
-          )),
+          children: list),
     );
     return form;
   }

@@ -27,19 +27,21 @@ class _NewSwimmerGenderPageState extends State<NewSwimmerGenderPage> {
     _gender = widget.account.gender;
   }
 
+  void _onPressedBackButton() {
+    final SwimmerAccount account = SwimmerAccount(
+      firstName: widget.account.firstName,
+      lastName: widget.account.lastName,
+      dateOfBirth: widget.account.dateOfBirth,
+      gender: _gender,
+    );
+    Navigator.pop(context, account);
+  }
+
   Widget _buildBackButton(BuildContext context) {
     if (isMaterial(context)) {
       return IconButton(
         padding: EdgeInsets.zero,
-        onPressed: () {
-          final SwimmerAccount account = SwimmerAccount(
-            firstName: widget.account.firstName,
-            lastName: widget.account.lastName,
-            dateOfBirth: widget.account.dateOfBirth,
-            gender: _gender,
-          );
-          Navigator.pop(context, account);
-        },
+        onPressed: _onPressedBackButton,
         icon: Icon(
           Icons.arrow_back,
           color: Theme.of(context).colorScheme.onPrimary,
@@ -47,7 +49,7 @@ class _NewSwimmerGenderPageState extends State<NewSwimmerGenderPage> {
       );
     }
     return PlatformButton(
-      onPressed: () => Navigator.pop(context),
+      onPressed: _onPressedBackButton,
       padding: EdgeInsets.zero,
       color: Colors.transparent,
       cupertino: (_, __) => CupertinoButtonData(
@@ -170,11 +172,11 @@ class _NewSwimmerGenderPageState extends State<NewSwimmerGenderPage> {
     // wrap in a form
     final form = Form(
       key: _formKey,
-      child: SingleChildScrollView(
-        physics: const AlwaysScrollableScrollPhysics(),
-        padding: const EdgeInsets.symmetric(horizontal: 32.0),
-        child: _buildGenderChoiceButtons(context),
-      ),
+      child: ListView(
+          padding: const EdgeInsets.symmetric(horizontal: 32.0),
+          children: [
+            _buildGenderChoiceButtons(context),
+          ]),
     );
     return form;
   }

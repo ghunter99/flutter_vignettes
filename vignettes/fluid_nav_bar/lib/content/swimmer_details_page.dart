@@ -254,7 +254,7 @@ class SwimmerDetailsPage extends HookWidget {
               ),
               Positioned(
                 top: 8,
-                right: 12,
+                right: 8,
                 child: _buildEditButton(context),
               )
             ],

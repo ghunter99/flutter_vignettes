@@ -281,12 +281,10 @@ class _EditSwimmerNamePageState extends State<EditSwimmerNamePage> {
     // wrap in a form
     final form = Form(
       key: _formKey,
-      child: SingleChildScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          padding: const EdgeInsets.symmetric(horizontal: 32.0),
-          child: Column(
-            children: list,
-          )),
+      child: ListView(
+        padding: const EdgeInsets.symmetric(horizontal: 32.0),
+        children: list,
+      ),
     );
     return form;
   }

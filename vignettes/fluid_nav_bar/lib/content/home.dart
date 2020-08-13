@@ -27,7 +27,7 @@ class HomeContent extends HookWidget {
       children: [
         Container(
           height: 44,
-          color: Constants.darkBackgroundColor,
+          color: Theme.of(context).colorScheme.background,
         ),
         Material(
           color: Constants.darkPinkColor,
@@ -80,7 +80,7 @@ class HomeContent extends HookWidget {
                     controller: tabController,
                     children: [
                       ListView.builder(
-                        itemCount: 3,
+                        itemCount: 0,
                         itemBuilder: (content, index) {
                           final avatarColor = index % 2 == 0
                               ? const Color(0xFFf4a647)
@@ -107,7 +107,7 @@ class HomeContent extends HookWidget {
                         },
                       ),
                       ListView.builder(
-                        itemCount: 12,
+                        itemCount: 0,
                         itemBuilder: (content, index) {
                           var avatarColor = Constants.darkCyanColor;
                           if (index % 4 == 1) {

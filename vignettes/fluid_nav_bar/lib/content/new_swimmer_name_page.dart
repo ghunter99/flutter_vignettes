@@ -81,13 +81,13 @@ class _NewSwimmerNamePageState extends State<NewSwimmerNamePage> {
     return 'Name can not contain special characters or emoji';
   }
 
+  void _onPressedBackButton() {}
+
   Widget _buildBackButton(BuildContext context) {
     if (isMaterial(context)) {
       return IconButton(
         padding: EdgeInsets.zero,
-        onPressed: () {
-          Navigator.pop(context, null);
-        },
+        onPressed: () => Navigator.pop(context, null),
         icon: Icon(
           Icons.arrow_back,
           color: Theme.of(context).colorScheme.onPrimary,
@@ -239,7 +239,7 @@ class _NewSwimmerNamePageState extends State<NewSwimmerNamePage> {
 
   Widget _buildNextButton(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(right: 8, top: 4, bottom: 4),
+      padding: const EdgeInsets.only(right: 8, top: 8, bottom: 0),
       child: PlatformButton(
         padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
         color: Theme.of(context).colorScheme.primaryVariant,
@@ -299,12 +299,10 @@ class _NewSwimmerNamePageState extends State<NewSwimmerNamePage> {
     // wrap in a form
     final form = Form(
       key: _formKey,
-      child: SingleChildScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          padding: const EdgeInsets.symmetric(horizontal: 32.0),
-          child: Column(
-            children: list,
-          )),
+      child: ListView(
+        padding: const EdgeInsets.symmetric(horizontal: 32.0),
+        children: list,
+      ),
     );
     return form;
   }
