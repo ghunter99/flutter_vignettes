@@ -70,7 +70,7 @@ class _ThemeDialogState extends State<ThemeDialog> {
               ),
               RadioListTile<ThemeMode>(
                 title: AppFormat.fixedText(
-                  'System',
+                  'System default',
                   style: Theme.of(context).textTheme.subtitle1,
                 ),
                 groupValue: _themeMode,

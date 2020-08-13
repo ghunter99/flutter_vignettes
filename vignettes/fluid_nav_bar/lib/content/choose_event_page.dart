@@ -4,12 +4,21 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import '../app_constants.dart';
 
 class ChooseEventPage extends StatefulWidget {
+  const ChooseEventPage(this.currentEvent);
+  final SwimEvent currentEvent;
+
   @override
   _ChooseEventPageState createState() => _ChooseEventPageState();
 }
 
 class _ChooseEventPageState extends State<ChooseEventPage> {
-  SwimEvent _chosenEvent = SwimEvent.freestyle25m;
+  SwimEvent _chosenEvent;
+
+  @override
+  void initState() {
+    super.initState();
+    _chosenEvent = widget.currentEvent;
+  }
 
   Widget _buildCancelButton(BuildContext context) {
     if (isMaterial(context)) {
@@ -48,24 +57,6 @@ class _ChooseEventPageState extends State<ChooseEventPage> {
       ),
       trailingActions: <Widget>[
         _buildCancelButton(context),
-//        PlatformButton(
-//          padding: EdgeInsets.symmetric(horizontal: 16),
-//          color: Theme.of(context).colorScheme.background,
-//          onPressed: () {
-//            Navigator.pop(context, _chosenEvent);
-//          },
-//          materialFlat: (_, __) => MaterialFlatButtonData(
-//            shape: const StadiumBorder(),
-//          ),
-//          cupertino: (_, __) => CupertinoButtonData(
-//            color: Theme.of(context).colorScheme.primaryVariant,
-//            borderRadius: BorderRadius.circular(50),
-//          ),
-//          child: Text(
-//            'Save',
-//            style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
-//          ),
-//        )
       ],
       cupertino: (_, __) => CupertinoNavigationBarData(
         padding: const EdgeInsetsDirectional.only(start: 0, end: 0),
@@ -113,8 +104,9 @@ class _ChooseEventPageState extends State<ChooseEventPage> {
           const EdgeInsets.only(left: 16, top: 6, right: 24, bottom: 8),
       label: Text(
         distance.padLeft(4),
-        style: const TextStyle(color: Colors.white),
-        //       style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
+        style: Theme.of(context).textTheme.headline3.copyWith(
+              color: Colors.white,
+            ),
       ),
       selected: _chosenEvent == event,
       onSelected: (_) {

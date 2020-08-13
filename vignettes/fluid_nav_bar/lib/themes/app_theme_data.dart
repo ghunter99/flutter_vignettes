@@ -102,14 +102,14 @@ class AppThemeData {
   static const _regular = FontWeight.w400;
   static const _medium = FontWeight.w500;
   static const _semiBold = FontWeight.w600;
-  //static const _bold = FontWeight.w700;
+  static const _bold = FontWeight.w700;
 
   static final TextTheme _textTheme = TextTheme(
     //
     // displayColor is applied to these text themes
     //
-    headline1: GoogleFonts.dancingScript(fontWeight: _regular, fontSize: 48.0),
-    headline2: GoogleFonts.dancingScript(fontWeight: _regular, fontSize: 32.0),
+    headline1: GoogleFonts.lato(fontWeight: _bold, fontSize: 48.0),
+    headline2: GoogleFonts.lato(fontWeight: _bold, fontSize: 36.0),
     headline3: GoogleFonts.lato(fontWeight: _semiBold, fontSize: 22.0),
     headline4: GoogleFonts.lato(fontWeight: _regular, fontSize: 22.0),
     caption: GoogleFonts.lato(fontWeight: _semiBold, fontSize: 20.0),

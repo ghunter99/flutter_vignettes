@@ -110,18 +110,6 @@ class SwimmerDetailsPage extends HookWidget {
     SwimmerAccount account,
   ) {
     return StyledSwimmerAvatar(account: account, size: 100);
-//    return CircleAvatar(
-//      backgroundColor: Theme.of(context).colorScheme.primary,
-//      foregroundColor: Colors.white,
-//      radius: 48,
-//      child: Text(
-//        swimmers[index].initials,
-//        style: const TextStyle(
-//          fontSize: 42,
-//          fontWeight: FontWeight.bold,
-//        ),
-//      ),
-//    );
   }
 
   void _openPage(
@@ -189,7 +177,7 @@ class SwimmerDetailsPage extends HookWidget {
                                       thickness: 1,
                                       color: Colors.grey),
                                   const Text(
-                                    'Birthday',
+                                    'Birthdate',
                                     style: TextStyle(
                                       color: Colors.grey,
                                       fontSize: 22,

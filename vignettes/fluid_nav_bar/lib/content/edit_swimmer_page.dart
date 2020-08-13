@@ -13,7 +13,7 @@ import '../styled_components/styled_swimmer_avatar.dart';
 import 'edit_swimmer_name_page.dart';
 
 class EditSwimmerPage extends HookWidget {
-  EditSwimmerPage(this.index);
+  const EditSwimmerPage(this.index);
 
   final int index;
 

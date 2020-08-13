@@ -1,11 +1,15 @@
 import 'dart:math';
 
+import 'package:fluid_nav_bar/content/choose_swimmer_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 
 import '../app_constants.dart';
+import '../content/choose_lane_page.dart';
+import '../main.dart';
+import '../model/swimmer_account.dart';
 import 'choose_event_page.dart';
 import 'liquid_painter.dart';
 
@@ -45,6 +49,8 @@ class _StopwatchContentState extends State<StopwatchContent>
   double _screenHeight;
 
   SwimEvent _swimEvent = SwimEvent.freestyle25m;
+  int _swimLane = AppConstants.firstSwimLane;
+  SwimmerAccount _swimmerAccount;
 
   @override
   void initState() {
@@ -75,10 +81,56 @@ class _StopwatchContentState extends State<StopwatchContent>
     }
   }
 
+  Widget _buildCancelButton(BuildContext context) {
+    if (isMaterial(context)) {
+      return IconButton(
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        icon: const Icon(
+          Icons.close,
+        ),
+      );
+    }
+    return PlatformButton(
+      padding: EdgeInsets.zero,
+      onPressed: () {
+        Navigator.pop(context);
+      },
+      cupertino: (_, __) => CupertinoButtonData(
+        padding: EdgeInsets.zero,
+      ),
+      child: Icon(
+        Icons.close,
+        color: Theme.of(context).colorScheme.onPrimary,
+      ),
+    );
+  }
+
+  PlatformAppBar _buildAppBar(BuildContext context) {
+    return PlatformAppBar(
+      backgroundColor: Theme.of(context).colorScheme.background,
+      automaticallyImplyLeading: false,
+      trailingActions: <Widget>[
+        _buildCancelButton(context),
+      ],
+      cupertino: (_, __) => CupertinoNavigationBarData(
+        padding: const EdgeInsetsDirectional.only(start: 0, end: 0),
+        backgroundColor: Colors.transparent,
+        border: const Border(),
+        transitionBetweenRoutes: false,
+      ),
+      material: (_, __) => MaterialAppBarData(
+        centerTitle: true,
+        elevation: 0,
+      ),
+    );
+  }
+
   Route<SwimEvent> _createChooseEventPageRoute() {
     return PageRouteBuilder<SwimEvent>(
       pageBuilder: (context, animation, secondaryAnimation) =>
-          ChooseEventPage(),
+          ChooseEventPage(_swimEvent),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         const begin = Offset(0.0, 1.0);
         final end = Offset.zero;
@@ -92,6 +144,163 @@ class _StopwatchContentState extends State<StopwatchContent>
           child: child,
         );
       },
+    );
+  }
+
+  Widget _buildEventButton(BuildContext context) {
+    return PlatformButton(
+      padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 32),
+      color: Theme.of(context).colorScheme.primary,
+      onPressed: () async {
+        final event = await Navigator.of(context)
+            .push<SwimEvent>(_createChooseEventPageRoute());
+        if (event != null && event != _swimEvent) {
+          setState(() {
+            _swimEvent = event;
+          });
+        }
+      },
+      materialFlat: (_, __) => MaterialFlatButtonData(
+        shape: const StadiumBorder(),
+      ),
+      cupertino: (_, __) => CupertinoButtonData(
+        color: Theme.of(context).colorScheme.primary,
+        borderRadius: BorderRadius.circular(50),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Text(
+            _swimEvent.toString(),
+            style: Theme.of(context).textTheme.headline3.copyWith(
+                  color: Colors.white,
+                ),
+          ),
+          const Icon(
+            Icons.edit,
+            color: Colors.white,
+            size: 20,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Route<int> _createChooseLanePageRoute() {
+    return PageRouteBuilder<int>(
+      pageBuilder: (context, animation, secondaryAnimation) =>
+          ChooseLanePage(_swimLane),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(0.0, 1.0);
+        final end = Offset.zero;
+        final curve = Curves.ease;
+
+        final tween =
+            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+        return SlideTransition(
+          position: animation.drive(tween),
+          child: child,
+        );
+      },
+    );
+  }
+
+  Widget _buildLaneButton(BuildContext context) {
+    return PlatformButton(
+      padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 32),
+      color: Theme.of(context).colorScheme.primary,
+      onPressed: () async {
+        final lane =
+            await Navigator.of(context).push<int>(_createChooseLanePageRoute());
+        if (lane != null && lane != _swimLane) {
+          setState(() {
+            _swimLane = lane;
+          });
+        }
+      },
+      materialFlat: (_, __) => MaterialFlatButtonData(
+        shape: const StadiumBorder(),
+      ),
+      cupertino: (_, __) => CupertinoButtonData(
+        color: Theme.of(context).colorScheme.primary,
+        borderRadius: BorderRadius.circular(50),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Text(
+            'Lane $_swimLane',
+            style: Theme.of(context).textTheme.headline3.copyWith(
+                  color: Colors.white,
+                ),
+          ),
+          const Icon(
+            Icons.edit,
+            color: Colors.white,
+            size: 20,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Route<SwimmerAccount> _createChooseSwimmerPageRoute() {
+    return PageRouteBuilder<SwimmerAccount>(
+      pageBuilder: (context, animation, secondaryAnimation) =>
+          ChooseSwimmerPage(_swimmerAccount),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(0.0, 1.0);
+        final end = Offset.zero;
+        final curve = Curves.ease;
+
+        final tween =
+            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+        return SlideTransition(
+          position: animation.drive(tween),
+          child: child,
+        );
+      },
+    );
+  }
+
+  Widget _buildSwimmerName(BuildContext context) {
+    return PlatformButton(
+      padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 32),
+      color: Theme.of(context).colorScheme.primary,
+      onPressed: () async {
+        final swimmer = await Navigator.of(context)
+            .push<SwimmerAccount>(_createChooseSwimmerPageRoute());
+        if (swimmer != null && swimmer.id != _swimmerAccount.id) {
+          setState(() {
+            _swimmerAccount = swimmer;
+          });
+        }
+      },
+      materialFlat: (_, __) => MaterialFlatButtonData(
+        shape: const StadiumBorder(),
+      ),
+      cupertino: (_, __) => CupertinoButtonData(
+        color: Theme.of(context).colorScheme.primary,
+        borderRadius: BorderRadius.circular(50),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          PlatformText(
+            _swimmerAccount.fullName,
+            style: Theme.of(context).textTheme.headline3.copyWith(
+                  color: Colors.white,
+                ),
+          ),
+          const Icon(
+            Icons.edit,
+            color: Colors.white,
+            size: 20,
+          ),
+        ],
+      ),
     );
   }
 
@@ -115,6 +324,11 @@ class _StopwatchContentState extends State<StopwatchContent>
 
   @override
   Widget build(BuildContext context) {
+    final swimmers = useProvider(swimmerAccountListProvider.state);
+    if (_swimmerAccount == null) {
+      _swimmerAccount = swimmers[0];
+    }
+
     _screenHeight ??= MediaQuery.of(context).size.height;
 
     //If our open state has changed...
@@ -137,34 +351,8 @@ class _StopwatchContentState extends State<StopwatchContent>
       color: Colors.transparent,
       child: PlatformScaffold(
         backgroundColor: Theme.of(context).colorScheme.background,
-        appBar: PlatformAppBar(
-          backgroundColor: Theme.of(context).colorScheme.background,
-          automaticallyImplyLeading: false,
-          trailingActions: <Widget>[
-            PlatformButton(
-              padding: EdgeInsets.zero,
-              onPressed: () {
-                _stopWatchTimer.onExecute.add(StopWatchExecute.reset);
-                Navigator.pop(context);
-              },
-              color: Theme.of(context).colorScheme.background,
-              child: Text(
-                'Close',
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onPrimary,
-                ),
-              ),
-            )
-          ],
-          cupertino: (_, __) => CupertinoNavigationBarData(
-            border: const Border(),
-            transitionBetweenRoutes: false,
-          ),
-          material: (_, __) => MaterialAppBarData(
-            centerTitle: true,
-            elevation: 0,
-          ),
-        ),
+        iosContentPadding: true,
+        appBar: _buildAppBar(context),
         body: Stack(
           fit: StackFit.expand,
           children: <Widget>[
@@ -177,11 +365,7 @@ class _StopwatchContentState extends State<StopwatchContent>
             // Stopwatch content
             Container(
               padding: const EdgeInsets.only(
-                left: 32,
-                right: 32,
-                top: 24,
-                bottom: 48,
-              ),
+                  left: 32, right: 32, top: 24, bottom: 48),
               child: Center(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -190,109 +374,11 @@ class _StopwatchContentState extends State<StopwatchContent>
                   children: <Widget>[
                     Column(
                       children: <Widget>[
-                        PlatformButton(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 0, horizontal: 32),
-                          color: Theme.of(context).colorScheme.primary,
-                          onPressed: () async {
-                            final event = await Navigator.of(context)
-                                .push<SwimEvent>(_createChooseEventPageRoute());
-                            if (event != null && event != _swimEvent) {
-                              setState(() {
-                                _swimEvent = event;
-                              });
-                            }
-                          },
-                          materialFlat: (_, __) => MaterialFlatButtonData(
-                            shape: const StadiumBorder(),
-                          ),
-                          cupertino: (_, __) => CupertinoButtonData(
-                            color: Theme.of(context).colorScheme.primary,
-                            borderRadius: BorderRadius.circular(50),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              PlatformText(
-                                _swimEvent.toString(),
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              const Icon(
-                                Icons.edit,
-                                color: Colors.white,
-                                size: 20,
-                              ),
-                            ],
-                          ),
-                        ),
+                        _buildEventButton(context),
                         const SizedBox(height: 24),
-                        PlatformButton(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 0, horizontal: 32),
-                          color: Theme.of(context).colorScheme.primary,
-                          onPressed: () {},
-                          materialFlat: (_, __) => MaterialFlatButtonData(
-                            shape: const StadiumBorder(),
-                          ),
-                          cupertino: (_, __) => CupertinoButtonData(
-                            color: Theme.of(context).colorScheme.primary,
-                            borderRadius: BorderRadius.circular(50),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              PlatformText(
-                                'Lane 1',
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              const Icon(
-                                Icons.edit,
-                                color: Colors.white,
-                                size: 20,
-                              ),
-                            ],
-                          ),
-                        ),
+                        _buildLaneButton(context),
                         const SizedBox(height: 24),
-                        PlatformButton(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 0, horizontal: 32),
-                          color: Theme.of(context).colorScheme.primary,
-                          onPressed: () {},
-                          materialFlat: (_, __) => MaterialFlatButtonData(
-                            shape: const StadiumBorder(),
-                          ),
-                          cupertino: (_, __) => CupertinoButtonData(
-                            color: Theme.of(context).colorScheme.primary,
-                            borderRadius: BorderRadius.circular(50),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              PlatformText(
-                                'Mab Midgely',
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              const Icon(
-                                Icons.edit,
-                                color: Colors.white,
-                                size: 20,
-                              ),
-                            ],
-                          ),
-                        ),
+                        _buildSwimmerName(context),
                       ],
                     ),
                     StreamBuilder<int>(
@@ -403,11 +489,12 @@ class _StopwatchContentState extends State<StopwatchContent>
                           children: <Widget>[
                             PlatformText(
                               'STOP',
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 36,
-                                fontWeight: FontWeight.bold,
-                              ),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline2
+                                  .copyWith(
+                                    color: Colors.white,
+                                  ),
                             ),
                           ],
                         ),
@@ -465,11 +552,12 @@ class _StopwatchContentState extends State<StopwatchContent>
                             ),
                             child: PlatformText(
                               'FINISH',
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 36,
-                                fontWeight: FontWeight.bold,
-                              ),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline2
+                                  .copyWith(
+                                    color: Colors.white,
+                                  ),
                             ),
                           ),
                         ],

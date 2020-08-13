@@ -81,8 +81,6 @@ class _NewSwimmerNamePageState extends State<NewSwimmerNamePage> {
     return 'Name can not contain special characters or emoji';
   }
 
-  void _onPressedBackButton() {}
-
   Widget _buildBackButton(BuildContext context) {
     if (isMaterial(context)) {
       return IconButton(

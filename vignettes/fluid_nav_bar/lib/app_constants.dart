@@ -52,4 +52,7 @@ class AppConstants {
 
   // The desktop top padding for a page's first header (e.g. Gallery, Settings)
   static const firstHeaderDesktopTopPadding = 5.0;
+
+  static const firstSwimLane = 1;
+  static const lastSwimLane = 10;
 }
