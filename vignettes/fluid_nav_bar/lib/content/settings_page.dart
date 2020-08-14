@@ -17,8 +17,9 @@ class _SettingsPageState extends State<SettingsPage> {
         onPressed: () {
           Navigator.pop(context);
         },
-        icon: const Icon(
+        icon: Icon(
           Icons.close,
+          color: Theme.of(context).colorScheme.onPrimary,
         ),
       );
     }

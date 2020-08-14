@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../main.dart';
 import '../model/swimmer_account.dart';
 
 class ChooseSwimmerPage extends StatefulWidget {
-  const ChooseSwimmerPage(this.currentSwimmer);
+  const ChooseSwimmerPage(
+    this.currentSwimmer,
+    this.swimmerList,
+  );
   final SwimmerAccount currentSwimmer;
+  final List<SwimmerAccount> swimmerList;
 
   @override
   _ChooseSwimmerPageState createState() => _ChooseSwimmerPageState();
@@ -28,8 +30,9 @@ class _ChooseSwimmerPageState extends State<ChooseSwimmerPage> {
         onPressed: () {
           Navigator.pop(context, null);
         },
-        icon: const Icon(
+        icon: Icon(
           Icons.close,
+          color: Theme.of(context).colorScheme.onPrimary,
         ),
       );
     }
@@ -87,7 +90,7 @@ class _ChooseSwimmerPageState extends State<ChooseSwimmerPage> {
         constraints:
             BoxConstraints(minWidth: MediaQuery.of(context).size.width - 64),
         child: Text(
-          'Lane ${swimmer.fullName}',
+          swimmer.fullName,
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.headline3.copyWith(
                 color: Colors.white,
@@ -111,14 +114,13 @@ class _ChooseSwimmerPageState extends State<ChooseSwimmerPage> {
 
   @override
   Widget build(BuildContext context) {
-    final swimmers = useProvider(swimmerAccountListProvider.state);
     return Material(
       color: Theme.of(context).colorScheme.background,
       child: SafeArea(
         child: PlatformScaffold(
           appBar: _buildAppBar(context),
           body: ListView.builder(
-            itemCount: swimmers.length,
+            itemCount: widget.swimmerList.length,
             itemBuilder: (context, index) {
               return Column(
                 children: [
@@ -126,7 +128,7 @@ class _ChooseSwimmerPageState extends State<ChooseSwimmerPage> {
                     padding: const EdgeInsets.symmetric(vertical: 8),
                     child: _buildChoiceChip(
                       context,
-                      swimmer: swimmers[index],
+                      swimmer: widget.swimmerList[index],
                     ),
                   ),
                 ],

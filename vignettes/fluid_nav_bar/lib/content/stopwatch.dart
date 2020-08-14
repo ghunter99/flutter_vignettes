@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:fluid_nav_bar/content/choose_swimmer_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -8,7 +7,7 @@ import 'package:stop_watch_timer/stop_watch_timer.dart';
 
 import '../app_constants.dart';
 import '../content/choose_lane_page.dart';
-import '../main.dart';
+import '../content/choose_swimmer_page.dart';
 import '../model/swimmer_account.dart';
 import 'choose_event_page.dart';
 import 'liquid_painter.dart';
@@ -23,9 +22,12 @@ enum _State {
 final timeProvider = Provider((_) => '00:00:00');
 
 class StopwatchContent extends StatefulWidget {
+  StopwatchContent({Key key, this.swimmerList}) : super(key: key);
+  final List<SwimmerAccount> swimmerList;
   final isOpen = true;
   final requiredPoints = 100;
   final earnedPoints = 68;
+
   @override
   _StopwatchContentState createState() => _StopwatchContentState();
 }
@@ -87,8 +89,9 @@ class _StopwatchContentState extends State<StopwatchContent>
         onPressed: () {
           Navigator.pop(context);
         },
-        icon: const Icon(
+        icon: Icon(
           Icons.close,
+          color: Theme.of(context).colorScheme.onPrimary,
         ),
       );
     }
@@ -134,7 +137,7 @@ class _StopwatchContentState extends State<StopwatchContent>
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         const begin = Offset(0.0, 1.0);
         final end = Offset.zero;
-        final curve = Curves.ease;
+        const curve = Curves.ease;
 
         final tween =
             Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
@@ -149,7 +152,7 @@ class _StopwatchContentState extends State<StopwatchContent>
 
   Widget _buildEventButton(BuildContext context) {
     return PlatformButton(
-      padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 32),
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
       color: Theme.of(context).colorScheme.primary,
       onPressed: () async {
         final event = await Navigator.of(context)
@@ -193,7 +196,7 @@ class _StopwatchContentState extends State<StopwatchContent>
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         const begin = Offset(0.0, 1.0);
         final end = Offset.zero;
-        final curve = Curves.ease;
+        const curve = Curves.ease;
 
         final tween =
             Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
@@ -208,7 +211,7 @@ class _StopwatchContentState extends State<StopwatchContent>
 
   Widget _buildLaneButton(BuildContext context) {
     return PlatformButton(
-      padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 32),
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
       color: Theme.of(context).colorScheme.primary,
       onPressed: () async {
         final lane =
@@ -248,11 +251,11 @@ class _StopwatchContentState extends State<StopwatchContent>
   Route<SwimmerAccount> _createChooseSwimmerPageRoute() {
     return PageRouteBuilder<SwimmerAccount>(
       pageBuilder: (context, animation, secondaryAnimation) =>
-          ChooseSwimmerPage(_swimmerAccount),
+          ChooseSwimmerPage(_swimmerAccount, widget.swimmerList),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         const begin = Offset(0.0, 1.0);
         final end = Offset.zero;
-        final curve = Curves.ease;
+        const curve = Curves.ease;
 
         final tween =
             Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
@@ -267,7 +270,7 @@ class _StopwatchContentState extends State<StopwatchContent>
 
   Widget _buildSwimmerName(BuildContext context) {
     return PlatformButton(
-      padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 32),
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
       color: Theme.of(context).colorScheme.primary,
       onPressed: () async {
         final swimmer = await Navigator.of(context)
@@ -288,7 +291,7 @@ class _StopwatchContentState extends State<StopwatchContent>
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          PlatformText(
+          Text(
             _swimmerAccount.fullName,
             style: Theme.of(context).textTheme.headline3.copyWith(
                   color: Colors.white,
@@ -324,10 +327,7 @@ class _StopwatchContentState extends State<StopwatchContent>
 
   @override
   Widget build(BuildContext context) {
-    final swimmers = useProvider(swimmerAccountListProvider.state);
-    if (_swimmerAccount == null) {
-      _swimmerAccount = swimmers[0];
-    }
+    _swimmerAccount ??= widget.swimmerList[0];
 
     _screenHeight ??= MediaQuery.of(context).size.height;
 

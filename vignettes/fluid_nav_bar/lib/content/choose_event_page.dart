@@ -26,8 +26,9 @@ class _ChooseEventPageState extends State<ChooseEventPage> {
         onPressed: () {
           Navigator.pop(context, null);
         },
-        icon: const Icon(
+        icon: Icon(
           Icons.close,
+          color: Theme.of(context).colorScheme.onPrimary,
         ),
       );
     }
