@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 
-import '../model/app_format.dart';
-
 class ThemeDialog extends StatefulWidget {
   const ThemeDialog({
     @required this.themeMode,
@@ -51,7 +49,7 @@ class _ThemeDialogState extends State<ThemeDialog> {
             children: <Widget>[
               const SizedBox(height: 8),
               RadioListTile<ThemeMode>(
-                title: AppFormat.fixedText(
+                title: Text(
                   'Light',
                   style: Theme.of(context).textTheme.subtitle1,
                 ),
@@ -60,7 +58,7 @@ class _ThemeDialogState extends State<ThemeDialog> {
                 value: ThemeMode.light,
               ),
               RadioListTile<ThemeMode>(
-                title: AppFormat.fixedText(
+                title: Text(
                   'Dark',
                   style: Theme.of(context).textTheme.subtitle1,
                 ),
@@ -69,7 +67,7 @@ class _ThemeDialogState extends State<ThemeDialog> {
                 value: ThemeMode.dark,
               ),
               RadioListTile<ThemeMode>(
-                title: AppFormat.fixedText(
+                title: Text(
                   'System default',
                   style: Theme.of(context).textTheme.subtitle1,
                 ),

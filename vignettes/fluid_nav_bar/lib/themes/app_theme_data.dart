@@ -103,6 +103,7 @@ class AppThemeData {
   static const _medium = FontWeight.w500;
   static const _semiBold = FontWeight.w600;
   static const _bold = FontWeight.w700;
+  static const _extraBold = FontWeight.w800;
 
   static final TextTheme _textTheme = TextTheme(
     //
@@ -118,7 +119,7 @@ class AppThemeData {
     //
     headline5: GoogleFonts.lato(fontWeight: _medium, fontSize: 18.0),
     // used by appBar title, dialog title
-    headline6: GoogleFonts.balooTamma(fontWeight: _medium, fontSize: 24.0),
+    headline6: GoogleFonts.balooTamma(fontWeight: _extraBold, fontSize: 22.0),
 //    headline6: GoogleFonts.dancingScript(fontWeight: _bold, fontSize: 28.0),
     // used by card title, dialog content, text form, chip label
     subtitle1: GoogleFonts.lato(fontWeight: _regular, fontSize: 18.0),
@@ -128,6 +129,6 @@ class AppThemeData {
     bodyText2: GoogleFonts.lato(fontWeight: _medium, fontSize: 16.0),
     overline: GoogleFonts.lato(fontWeight: _semiBold, fontSize: 14.0),
     // used by button
-    button: GoogleFonts.lato(fontWeight: _semiBold, fontSize: 18.0),
+    button: GoogleFonts.lato(fontWeight: _semiBold, fontSize: 16.0),
   );
 }

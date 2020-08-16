@@ -1,9 +1,9 @@
+import 'package:fluid_nav_bar/styled_components/styled_trailing_action_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../main.dart';
-import '../model/app_format.dart';
 import '../model/swimmer_account.dart';
 
 class NewSwimmerGenderPage extends StatefulWidget {
@@ -80,31 +80,6 @@ class _NewSwimmerGenderPageState extends State<NewSwimmerGenderPage> {
     Navigator.pop(context, null);
   }
 
-  Widget _buildSaveButton(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 8, top: 4, bottom: 4),
-      child: PlatformButton(
-        padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
-        color: Theme.of(context).colorScheme.primaryVariant,
-        onPressed: _onFormSubmit,
-        materialFlat: (_, __) => MaterialFlatButtonData(
-          shape: const StadiumBorder(),
-        ),
-        cupertino: (_, __) => CupertinoButtonData(
-          color: Theme.of(context).colorScheme.primaryVariant,
-          borderRadius: BorderRadius.circular(50),
-        ),
-        child: PlatformText(
-          'Save',
-          textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.caption.copyWith(
-                color: Colors.white,
-              ),
-        ),
-      ),
-    );
-  }
-
   PlatformAppBar _buildAppBar(BuildContext context) {
     return PlatformAppBar(
       automaticallyImplyLeading: false,
@@ -116,7 +91,7 @@ class _NewSwimmerGenderPageState extends State<NewSwimmerGenderPage> {
             ),
       ),
       trailingActions: <Widget>[
-        _buildSaveButton(context),
+        StyledTrailingActionButton('Save', _onFormSubmit),
       ],
       cupertino: (_, __) => CupertinoNavigationBarData(
         padding: const EdgeInsetsDirectional.only(start: 0),
@@ -139,7 +114,7 @@ class _NewSwimmerGenderPageState extends State<NewSwimmerGenderPage> {
         const SizedBox(height: 8),
         RadioListTile<Gender>(
           activeColor: Theme.of(context).colorScheme.primary,
-          title: AppFormat.fixedText(
+          title: Text(
             'Female',
             style: Theme.of(context).textTheme.subtitle1,
           ),
@@ -149,7 +124,7 @@ class _NewSwimmerGenderPageState extends State<NewSwimmerGenderPage> {
         ),
         RadioListTile<Gender>(
           activeColor: Theme.of(context).colorScheme.primary,
-          title: AppFormat.fixedText(
+          title: Text(
             'Male',
             style: Theme.of(context).textTheme.subtitle1,
           ),

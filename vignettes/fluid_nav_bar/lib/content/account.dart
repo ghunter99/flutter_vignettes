@@ -180,7 +180,7 @@ class AccountContent extends HookWidget {
                           ),
                           subtitle: Text(
                             'Age:  ${DateString.yyyyMMdd(swimmers[index].dateOfBirth).ageInYears}\n'
-                            'Birthdate:  ${AppFormat.dMMMMyyyy(swimmers[index].dateOfBirth)}\n'
+                            'Birthdate:  ${AppFormat.dMMMyyyy(swimmers[index].dateOfBirth)}\n'
                             'Gender:  ${swimmers[index].genderString}',
                             style: Theme.of(context)
                                 .textTheme

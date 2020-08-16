@@ -187,7 +187,7 @@ class SwimmerDetailsPage extends HookWidget {
                                     padding:
                                         const EdgeInsets.symmetric(vertical: 8),
                                     child: Text(
-                                      AppFormat.dMMMMyyyy(
+                                      AppFormat.dMMMyyyy(
                                           swimmers[index].dateOfBirth),
                                       style: TextStyle(
                                         color: Theme.of(context)

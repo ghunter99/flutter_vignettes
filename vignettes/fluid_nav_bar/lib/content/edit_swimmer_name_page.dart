@@ -232,12 +232,15 @@ class _EditSwimmerNamePageState extends State<EditSwimmerNamePage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          PlatformText(
-            'Save Changes',
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.caption.copyWith(
-                  color: Colors.white,
-                ),
+          Padding(
+            padding: const EdgeInsets.only(top: 8, bottom: 10),
+            child: Text(
+              'Save Changes',
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.caption.copyWith(
+                    color: Colors.white,
+                  ),
+            ),
           ),
         ],
       ),
@@ -269,13 +272,13 @@ class _EditSwimmerNamePageState extends State<EditSwimmerNamePage> {
 
   Widget _buildBody(BuildContext context) {
     final List<Widget> list = [];
-    list.add(const SizedBox(height: 24.0));
+    list.add(const SizedBox(height: 32.0));
     // first name
     list.add(_buildFirstNameButton(context));
-    list.add(const SizedBox(height: 24.0));
+    list.add(const SizedBox(height: 32.0));
     // Last name
     list.add(_buildLastNameButton(context));
-    list.add(const SizedBox(height: 32.0));
+    list.add(const SizedBox(height: 48.0));
     list.add(_buildSaveButton(context));
 
     // wrap in a form

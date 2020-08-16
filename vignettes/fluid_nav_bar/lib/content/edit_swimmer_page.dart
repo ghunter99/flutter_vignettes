@@ -182,7 +182,7 @@ class EditSwimmerPage extends HookWidget {
           lastDate: DateTime(DateTime.now().year - 1),
         );
         if (pickedDate != null) {
-          AppFormat.dMMMMyyyy(DateString(pickedDate).yyyyMMdd);
+          AppFormat.dMMMyyyy(DateString(pickedDate).yyyyMMdd);
           swimmerAccountListProvider.read(context).edit(
                 id: account.id,
                 firstName: account.firstName,
@@ -209,7 +209,7 @@ class EditSwimmerPage extends HookWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  AppFormat.dMMMMyyyy(account.dateOfBirth),
+                  AppFormat.dMMMyyyy(account.dateOfBirth),
                   style: Theme.of(context).textTheme.caption.copyWith(
                         color: Theme.of(context).colorScheme.primary,
                       ),

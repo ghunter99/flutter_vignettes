@@ -27,9 +27,9 @@ class AppFormat {
     return '';
   }
 
-  static String dMMMMyyyy(String yyyyMMdd) {
+  static String dMMMyyyy(String yyyyMMdd) {
     final dateString = DateString.yyyyMMdd(yyyyMMdd);
-    return DateFormat('d MMMM yyyy', 'en').format(dateString.dateTime);
+    return DateFormat('d MMM yyyy', 'en').format(dateString.dateTime);
   }
 
   static Widget fixedText(

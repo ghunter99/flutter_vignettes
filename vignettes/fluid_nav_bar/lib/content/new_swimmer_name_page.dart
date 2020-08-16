@@ -1,3 +1,4 @@
+import 'package:fluid_nav_bar/styled_components/styled_trailing_action_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 
@@ -235,31 +236,6 @@ class _NewSwimmerNamePageState extends State<NewSwimmerNamePage> {
     }
   }
 
-  Widget _buildNextButton(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 8, top: 8, bottom: 0),
-      child: PlatformButton(
-        padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
-        color: Theme.of(context).colorScheme.primaryVariant,
-        onPressed: _onFormSubmit,
-        materialFlat: (_, __) => MaterialFlatButtonData(
-          shape: const StadiumBorder(),
-        ),
-        cupertino: (_, __) => CupertinoButtonData(
-          color: Theme.of(context).colorScheme.primaryVariant,
-          borderRadius: BorderRadius.circular(50),
-        ),
-        child: PlatformText(
-          'Next',
-          textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.caption.copyWith(
-                color: Colors.white,
-              ),
-        ),
-      ),
-    );
-  }
-
   PlatformAppBar _buildAppBar(BuildContext context) {
     return PlatformAppBar(
       automaticallyImplyLeading: false,
@@ -271,7 +247,7 @@ class _NewSwimmerNamePageState extends State<NewSwimmerNamePage> {
             ),
       ),
       trailingActions: <Widget>[
-        _buildNextButton(context),
+        StyledTrailingActionButton('Next', _onFormSubmit),
       ],
       cupertino: (_, __) => CupertinoNavigationBarData(
         padding: const EdgeInsetsDirectional.only(start: 0),

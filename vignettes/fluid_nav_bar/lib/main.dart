@@ -40,7 +40,7 @@ final swimmerAccountListProvider = StateNotifierProvider((ref) {
 Future<void> main() async {
   await initializeDateFormatting('en_AU', null);
   intl.Intl.defaultLocale = 'en_AU';
-  GoogleFonts.config.allowRuntimeFetching = true;
+  GoogleFonts.config.allowRuntimeFetching = false;
   runApp(const ProviderScope(child: App()));
 }
 

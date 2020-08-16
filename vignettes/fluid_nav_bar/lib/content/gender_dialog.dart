@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 
-import '../model/app_format.dart';
 import '../model/swimmer_account.dart';
 
 class GenderDialog extends StatefulWidget {
@@ -37,7 +36,7 @@ class _GenderDialogState extends State<GenderDialog> {
             children: <Widget>[
               const SizedBox(height: 8),
               RadioListTile<Gender>(
-                title: AppFormat.fixedText(
+                title: Text(
                   'Female',
                   style: Theme.of(context).textTheme.subtitle1,
                 ),
@@ -46,7 +45,7 @@ class _GenderDialogState extends State<GenderDialog> {
                 value: Gender.female,
               ),
               RadioListTile<Gender>(
-                title: AppFormat.fixedText(
+                title: Text(
                   'Male',
                   style: Theme.of(context).textTheme.subtitle1,
                 ),
